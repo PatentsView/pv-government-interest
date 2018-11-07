@@ -68,13 +68,16 @@ looked_up_types <- ggplot(for_graph_types, aes(x=year,y=PercentageofAssignees,gr
         legend.key = element_blank(),
         legend.key.width = unit(3, 'lines'),
         legend.title=element_blank(),
-        text=element_text(size=16)
+        text=element_text(size=16, family = "Cambria")
   ) 
 
 looked_up_types
 
+# Save plot as pdf 
+CairoPDF(file = paste0("out\\looked_up_gi_patent_assignees_over_time", script_v), width = 9, height = 7)
+looked_up_types
+dev.off()
 
-ggsave(paste0("out\\looked_up_gi_patent_assignees_over_time", script_v, ".pdf"), plot=looked_up_types)
 write.csv(for_graph_types, "out\\sectors_over_time.csv")
 
 

@@ -18,7 +18,7 @@ install_pkgs <- function(pkg) {
 
 # load library packages
 pkg_list <- c("trend", "plyr", "scales", "MASS", "reshape", "tools", "plotly", "rjson",
-              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont")
+              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont", "Cairo")
 lapply(pkg_list, install_pkgs)
 # add ggplot2 after setting device
 library(ggplot2)

@@ -9,7 +9,7 @@ script_v <- "3.0"
 #########################################################################################################
 
 # connect to the aws mySQL server using config.R file
-source("G:/PatentsView/config.r")
+source("config.r")  
 my_db=src_mysql(dbname=dbname_new,host=host,port=port,user=user,password=password)
 ##################################################f#######################################################
 
@@ -58,61 +58,76 @@ in.gov_level <- in.gov_level %>% filter(patent_id %in% patents.keep_ids)
 
 # merge data two main data files
 in.patent_level.merged <- merge(in.patent_level, in.gov_level, by="patent_id")
-write.csv (in.patent_level.merged, file="out\\out.patent_level.merged.csv")
+#write.csv (in.patent_level.merged, file="out\\out.patent_level.merged.csv")
 
 
 #########################################################################################################
 # Plots
 
 source("top6_technology_fields.R")
-# top6_plot generated
+# top6_plot save as a pdf
 top6_plot
-ggsave (filename = paste0("data_viz\\longWipoFields_v", script_v, ".png"), plot = top6_plot, device = "png")
+CairoPDF(file= paste0("data_viz\\longWipoFields_v", script_v),  width = 9, height = 7)
+top6_plot
+dev.off()
 
-
-
-# share_gi_total_plot generated
+# share_gi_total_plot save as pdf
 share_gi_total_plot 
-ggsave (filename = paste0("data_viz\\longWipoFieldsPercent_v", script_v, ".png"), plot = 
-          share_gi_total_plot, device = "png")
+
+CairoPDF(file= paste0("data_viz\\longWipoFieldsPercent_v", script_v),  width = 9, height = 7)
+share_gi_total_plot 
+dev.off()
 
 source("other_figures.R")
-#index_plot generated
+#index_plot save as pdf
 index_plot
-ggsave (filename = paste0("data_viz\\indexed_", script_v, ".png"), plot = index_plot, device = "png")
 
+CairoPDF(file= paste0("data_viz\\indexed_", script_v),  width = 9, height = 7)
+index_plot
+dev.off()
 
-# mean_num_inv_plot generated
+# mean_num_inv_plot save as pdf 
 mean_num_inv_plot
-ggsave (filename = paste0("data_viz\\longInventor_v", script_v, ".png"), plot = mean_num_inv_plot, device = "png")
 
+CairoPDF(file= paste0("data_viz\\longInventor_v", script_v),  width = 9, height = 7)
+mean_num_inv_plot
+dev.off()
 
-
-# funding_agencies_plot generated
+# funding_agencies_plot save as pdf
 funding_agencies_plot
-ggsave (filename = paste0("data_viz\\funders-assignees.dodged_", script_v, ".png"), plot = funding_agencies_plot, device = "png")
 
+CairoPDF(file= paste0("data_viz\\funders-assignees.dodged_", script_v), width = 9, height = 7)
+funding_agencies_plot
+dev.off()
 
-# firm_size_plot generated
+# firm_size_plot save as pdf 
 firm_size_plot
-ggsave (filename = paste0("data_viz\\firmSize_", script_v, ".png"), plot = firm_size_plot, device = "png")
 
+CairoPDF(file = paste0("data_viz\\firmSize_", script_v), width = 9, height = 7)
+firm_size_plot
+dev.off()
 
 
 source("patent_flow_sankey.R")
 patent_flow_plot
-# patent_flow_plot (sankey visualization) generated
-orca(p.patent_flow, file = paste0("data_viz\\Sankey_", script_v, ".png"))
+# save patent_flow_plot (sankey visualization) as html
+orca(p.patent_flow, file = paste0("data_viz\\Sankey_", script_v, ".pdf"))
 htmlwidgets::saveWidget(patent_flow_plot, file = paste0("data_viz\\Sankey org name_", script_v, "_", ".html"))
 
+# save patent_flow_plot (sankey visualization) as pdf 
+CairoPDF(file = paste0("data_viz\\Sankey_", script_v), width = 9, height = 7)
+patent_flow_plot
+dev.off()
 
 source("citation_analysis.R")
 citation_plot
-# citation_plot generated 
-ggsave (filename = paste0("data_viz\\fiveYearCitationImpact_", script_v, ".png"), plot = citation_plot, device = "png")
+# save citation_plot as pdf 
+CairoPDF(file = paste0("data_viz\\fiveYearCitationImpact_", script_v), width = 9, height = 7)
+citation_plot
+dev.off()
 
 
-# Create data table alinging sector, agency, and field, by year
+# create data table aligning sector, agency, and field, by year
 
 # merge sector type for assignees and create dodged bar chart
 in.sector$organization <- trimws(in.sector$organization)

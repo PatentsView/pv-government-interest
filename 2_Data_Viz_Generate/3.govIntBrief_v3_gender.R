@@ -66,11 +66,11 @@ gi_teams_female_inv <- ggplot(for_graph) +
         text=element_text(size=10,  family="Cambria")
   )
 gi_teams_female_inv 
-ggsave(paste0("data_viz\\gi_teams_with_female_inventors_over_time", script_v, ".pdf"), plot=gi_teams_female_inv)
 
-ggsave(paste0("image_no_embed", script_v, ".pdf"), plot=gi_teams_female_inv)
-
-embed_fonts(file = "image_no_embed3.0.pdf", outfile = "image_embed_v3.pdf")
+# Save plot as pdf 
+CairoPDF(file = "data_viz\\gi_teams_with_female_inventors_over_time", width = 9, height = 7)
+gi_teams_female_inv 
+dev.off()
 
 write.csv (for_graph, file="out\\teams_with_at_least_one_woman.csv")
 
@@ -122,15 +122,17 @@ perc_female_inv <- ggplot(data=for_graph.num_inventors, aes(x=num_inventors, y=m
     legend.background = element_blank()
   )
   
+# Save plot as pdf 
+CairoPDF(file = "data_viz\\percent_with_female_inventor_by_team_size", width = 9, height = 7)
 perc_female_inv
+dev.off()
 
-# save pdf
-ggsave (paste0("data_viz\\percent_with_female_inventor_by_team_size", script_v,".pdf"), plot = perc_female_inv)
-
-# save png 
-ggsave (paste0("data_viz\\percent_with_female_inventor_by_team_size", script_v,".png"), plot = perc_female_inv)
 
 write.csv(for_graph.num_inventors, "out\\mean_percent_of_teams_with_a_female_inventor.csv")
+
+
+
+
 
 
 
