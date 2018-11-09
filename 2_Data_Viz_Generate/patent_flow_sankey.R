@@ -1,6 +1,6 @@
 
 # Top Gov Interest to assignee Patenting Flows
-# Figure A in gov interest data brief
+# Figure A in gov interest data brief 
 
   
   # process assignees table
@@ -12,6 +12,7 @@
   in.assignees$entity[which(in.assignees$entity == "")] <- in.assignees$name[which(in.assignees$entity == "")]
   
   assignees.clnd <- in.assignees[,c(1,2,8)]
+  
   #calculate the weight for each patent_id
   assignees.clnd <- assignees.clnd %>%  
     group_by(patent_id) %>% 
@@ -25,7 +26,7 @@
   
   assignees.merged.sub <- assignees.merged[,c(1, 3, 20)] # patent_id, entity, level_one
   ass_org.merged.ratio <- assignees.merged.sub %>%  
-    unique() %>% 
+    distinct() %>% 
     group_by(patent_id) %>% 
     mutate(weight = 1/n())
   
@@ -57,20 +58,10 @@
   target_lst <- lapply(target, function(x) match(x,nodes))
   count.ass_org.srtd$target <- unlist(target_lst)
   
-  # impute funder node ids onto original counts 
-  funders.links <- sapply(1:length(count.ass_org.srtd), function(x) grep(nodes[x], count.ass_org.srtd[,2], ignore.case = TRUE))
-  fl.df <- data.frame(ID = rep(seq(funders.links), sapply(funders.links, length)), Obs = unlist(funders.links))
-  fl.df[, 1] <- fl.df[,1] - 1
-  count.ass_org.srtd$source <- fl.df[order(fl.df$Obs), 1]
-  
-  # impute assignee node ids onto original counts
-  assignees.links <- sapply(1:nrow(count.ass_org.srtd), function(x) grep(nodes[x], count.ass_org.srtd[,1], ignore.case = TRUE))
-  al.df <- data.frame(ID = rep(seq(assignees.links), sapply(assignees.links, length)), Obs = unlist(assignees.links))
-  al.df[,1] <- al.df[,1] + length(top.funders) - 1 # offset
-  count.ass_org.srtd$target <- al.df[order(al.df$Obs), 1]
-  
-  #View(count.ass_org.srtd)
-  
+  # offset by 1 - so continous list of nodes starts at 0
+  count.ass_org.srtd$source <- count.ass_org.srtd$source - 1
+  count.ass_org.srtd$target <- count.ass_org.srtd$target - 1
+ 
   patent_flow_plot <- plot_ly(
     type = "sankey",
     orientation = "h",

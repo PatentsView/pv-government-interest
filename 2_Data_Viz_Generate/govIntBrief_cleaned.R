@@ -109,22 +109,22 @@ dev.off()
 
 
 source("patent_flow_sankey.R")
+
+#Sys.setenv('MAPBOX_TOKEN' = "pk.eyJ1IjoicGF0ZW5pc2giLCJhIjoiY2pvYWU5aGUxMGR1ejNrbzVvNHR4b2ZnciJ9._AGpzYSoU1wD-DOGnydpxw")
+
 patent_flow_plot
+
 # save patent_flow_plot (sankey visualization) as html
-orca(p.patent_flow, file = paste0("data_viz\\Sankey_", script_v, ".pdf"))
+orca(patent_flow_plot, file = paste0("data_viz\\Sankey_", script_v, ".pdf"))
 htmlwidgets::saveWidget(patent_flow_plot, file = paste0("data_viz\\Sankey org name_", script_v, "_", ".html"))
 
-# save patent_flow_plot (sankey visualization) as pdf 
-CairoPDF(file = paste0("data_viz\\Sankey_", script_v), width = 9, height = 7)
-patent_flow_plot
-dev.off()
 
 source("citation_analysis.R")
 citation_plot
-# save citation_plot as pdf 
+# save citation_plot as pdf
 CairoPDF(file = paste0("data_viz\\fiveYearCitationImpact_", script_v), width = 9, height = 7)
 citation_plot
-dev.off()
+dev.off() 
 
 
 # create data table aligning sector, agency, and field, by year
