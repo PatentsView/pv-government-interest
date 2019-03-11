@@ -14,27 +14,21 @@ install_pkgs <- function(pkg) {
   
 } # end install_pkgs()
 
-
-
 # load library packages
 pkg_list <- c("trend", "plyr", "scales", "MASS", "reshape", "tools", "plotly", "rjson",
               "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont", "Cairo", "processx")
+
 lapply(pkg_list, install_pkgs)
+
 # add ggplot2 after setting device
 library(ggplot2)
 
-# Note: These font import steps from the extrafont database only need to be run once
+# Note: These font import steps from the extrafont database only need to be run once (the first time you run this script)
 if(nrow(fonttable()) == 0){
   print("Importing fonts for the first time - this may take a few minutes")
   font_import()
   loadfonts(device = "pdf")
 }
-
-# Needed only on Windows - run once per R session
-# Adjust the path to match your installation of Ghostscript
-Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.25/bin/gswin64c.exe")
-
-Sys.setenv(path = "C:/Users/npatel/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/orca")
 
 
 # set color scheme
