@@ -1,16 +1,18 @@
 library(dplyr)
 library(tidyr)
+library(data.table)
 
 #read in table
-patent_inventor <- read.csv(file = "patent_inventor.csv", header=TRUE, sep=",")
-patent_assignee <- read.csv(file = "patent_assignee.csv", header=TRUE, sep=",")
-nber <- read.csv(file = "nber.csv", header=TRUE, sep=",")
-wipo <- read.csv(file = "wipo.csv", header=TRUE, sep=",")
-wipo_field <- read.csv(file = "wipo_field.csv", header=TRUE, sep=",")
-patent <- read.csv(file = "patent.csv", header=TRUE, sep=",")
+patent_inventor <- fread(file = "patent_inventor.tsv", header=TRUE, sep="\t")
+patent_assignee <- fread(file = "patent_assignee.tsv", header=TRUE, sep="\t")
+nber <- fread(file = "nber.tsv", header=TRUE, sep="\t")
+wipo <- fread.csv(file = "wipo.tsv", header=TRUE, sep="\t")
+wipo_field <- read.csv(file = "wipo_field.tsv", header=TRUE, sep="\t")
+patent <- fread(file = "patent.tsv", header=TRUE, sep="\t", col.names = c("id", "type", "number", "country", 
+                              "date", "abstract", "title", "kind", "num_claims", "filename", "withdrawn"))
 temp_5yr_citations <- read.csv(file = "temp_5yr_citations.csv", header=TRUE, sep=",")
-patent_govintorg <- read.csv(file = "patent_govintorg.csv", header=TRUE, sep=",")
-government_organization <- read.csv(file = "government_organization.csv", header=TRUE, sep=",")
+patent_govintorg <- fread(file = "patent_govintorg.tsv", header=TRUE, sep="\t")
+government_organization <- read.csv(file = "government_organization.tsv", header=TRUE, sep="\t")
 
 ## Create the main Patent Level and Government Interest Level tables
 ## These tables have a lot of details around the patents including information from the database

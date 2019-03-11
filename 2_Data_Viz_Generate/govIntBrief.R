@@ -8,26 +8,7 @@ source("requirements.R")
 script_v <- "3.0"
 #########################################################################################################
 
-# connect to the aws mySQL server using config.R file
-source("config.r")  
-my_db=src_mysql(dbname=dbname_new,host=host,port=port,user=user,password=password)
-##################################################f#######################################################
 
-### read in tables from mySQL DB
-
-#read from db
-#read from db
-in.patent_level <- as.data.frame(tbl(my_db, "temp_patent_level_gi_v3"))
-in.gov_level <- as.data.frame(tbl(my_db, "temp_gi_level_gi_v3"))
-in.all <- as.data.frame(tbl(my_db, "temp_patent_level_all_v3"))
-in.assignees.all <- as.data.frame(tbl(my_db, "all_assignees"))
-in.cite_1 <- as.data.frame(tbl(my_db, "temp_5yr_citations_by_cite_yr1_v3"))
-in.cite_2 <- as.data.frame(tbl(my_db, "temp_5yr_citations_by_cite_yr2_v3"))
-in.cite_3 <- as.data.frame(tbl(my_db, "temp_5yr_citations_by_cite_yr3_v3"))
-in.cite_4 <- as.data.frame(tbl(my_db, "temp_5yr_citations_by_cite_yr4_v3"))
-in.cite_5 <- as.data.frame(tbl(my_db, "temp_5yr_citations_by_cite_yr5_v3")) 
-
-# if you used R to generate table, change the read method of following tables to read from local
 #in.patent_level <- read.csv("data_to_read\\temp_patent_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
 #in.gov_level <- read.csv("data_to_read\\temp_gi_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
 #in.all <- read.csv("data_to_read\\temp_patent_level_all", header = TRUE, stringsAsFactors = FALSE)

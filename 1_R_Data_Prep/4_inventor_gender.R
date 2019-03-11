@@ -2,8 +2,7 @@
 temp_inventor_gender <- read.csv(file = "temp_inventor_gender.csv", header=TRUE, sep=",")
 temp_patent_level_gi <- read.csv(file = "temp_patent_level_gi.csv", header=TRUE, sep=",")
 patent_inventor <- read.csv(file = "patent_inventor.csv", header=TRUE, sep=",")
-temp_govt_associated_inventors_clean <- read.csv(file = "temp_govt_associated_inventors_clean.csv", header=TRUE, sep=",")
-temp_inventor_gender <- read.csv(file = "temp_inventor_gender.csv", header=TRUE, sep=",")
+#temp_govt_associated_inventors_clean <- read.csv(file = "temp_govt_associated_inventors_clean.csv", header=TRUE, sep=",")
 
 ## Inventor gender data 
 ## the tbales you wante are temp_gi_inventor_gender (which has gender and wipo sector etc)

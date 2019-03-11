@@ -11,7 +11,8 @@ There are two steps involved in running codefiles:
 2. Generate data visualizations
 
 **Step 1: Data Preparation**
-	a. To gather data, download the most updated bulk download datafiles from http://www.patentsview.org/download/ and save it to a folder 'data_to_read' in '2_Data_Viz_Generate'. Note: if this folder does not exist, you can create it. 
+
+	a. To gather data, download the most updated bulk download datafiles from http://www.patentsview.org/download/ and save it to a folder 'data_to_read' in '2_Data_Viz_Generate'. 
 		These are the bulk download datafiles you will need:
 			1. uspatentcitation
 			2. patent
@@ -25,7 +26,6 @@ There are two steps involved in running codefiles:
 			10. assignee
 			11. government_interest
 			12. rawassignee
-
 
 	b. Go to the folder '1_R_Data_Prep'. There should be 5 scripts in this folder that will help prepare the data for visualization. Open these scripts in R/RStudio. 
 	
@@ -44,11 +44,9 @@ There are two steps involved in running codefiles:
 			9. temp_5yr_citations_by_cite_yr5
 			10. assignee_type
 
-**Step 2: Get Lookup Files**
-	a. Put the lookup files that are provided in the folder 'data_to_read' under the folder '2_Data_Viz_Generate'. These files include:
-		a. assignees_lookedup_types.csv [from python script]
-		b. government_interest_patents_1980-2018_returned.csv [from USPTO]
-		c. Agencies.csv [from Archive]
+	e. Go to this webpage: https://www.aaas.org/programs/r-d-budget-and-policy/historical-trends-federal-rd and download the Excel file for "Total R&D by Agency, 1976-2018" under the _By Agency_ section. 
+
+		1. Open this file in Excel and transpose the data table. To do this, copy the data table (only upto Total R&D, ignore the R&D: Defense and Nondefense section) and using the paste special option, transpose the table. Save the transposed table as "agencies.csv" in the same 'data_to_read' folder under the '2_Data_Viz_Generate' folder.
 
 
 **Step 3: Generate Data Visualizations**
@@ -62,7 +60,7 @@ There are two steps involved in running codefiles:
 		** NOTE: In this step, if you generated tables using R in Step 1, then make sure you change the way you read in the tables in this script. **
 
 		This script will generate two folders:
-		**(1) Folder 'data_viz':** a folder to store all of the viz that will be generated from running this R script
-		**(2) Folder 'out':** a folder to store all of the tables that will be generated from running this R script
+		(1) Folder 'data_viz': a folder to store all of the viz that will be generated from running this R script
+		(2) Folder 'out': a folder to store all of the tables that will be generated from running this R script
 	
 	

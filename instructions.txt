@@ -31,6 +31,7 @@ Step 1:
 
 		b. Go to the folder '1_R_Data_Prep'. 
 		c. Make sure you change the path which you store your data you downloaded in step (a). Then run through all of the R scripts in numerical order to generate tables 
+		Note: reading in some of the data files at the beginning of the script may take several minutes, some of the input files are large. 
 		d. Save all the tables generated in this step in folder 'data_to_read', these include
 			1. temp_patent_level_gi.csv
 			2. temp_gi_level_gi.csv
