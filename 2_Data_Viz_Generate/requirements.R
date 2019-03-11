@@ -34,7 +34,7 @@ if(nrow(fonttable()) == 0){
 # Adjust the path to match your installation of Ghostscript
 Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.25/bin/gswin64c.exe")
 
-
+Sys.setenv(path = "C:/Users/npatel/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/orca")
 
 
 # set color scheme

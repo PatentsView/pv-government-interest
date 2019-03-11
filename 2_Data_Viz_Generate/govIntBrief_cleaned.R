@@ -111,11 +111,22 @@ dev.off()
 source("patent_flow_sankey.R")
 
 #Sys.setenv('MAPBOX_TOKEN' = "pk.eyJ1IjoicGF0ZW5pc2giLCJhIjoiY2pvYWU5aGUxMGR1ejNrbzVvNHR4b2ZnciJ9._AGpzYSoU1wD-DOGnydpxw")
+Sys.setenv(path = "C:/Users/npatel/AppData/Local/Programs/orca/orca.exe")
+Sys.setenv(path = "C:/Program Files/Anaconda2/orca_app/orca.exe")
+Sys.setenv(path = "C:/Users/npatel/AppData/Local/Programs/orca/resources/app/bin/orca.sh")
+Sys.setenv(path = "/C:/Users/npatel/AppData/Roaming/Microsoft/Windows/Start Menu/Programs")
 
+Sys.setenv(path = "C:/Program Files/Anaconda2/orca.cmd")
 patent_flow_plot
 
+
+json <- plotly:::to_JSON(patent_flow_plot)
+cmd <- sprintf("orca graph '%s' -o r-export-test.png", json)
+system(cmd)
+
+
 # save patent_flow_plot (sankey visualization) as html
-orca(patent_flow_plot, file = paste0("data_viz\\Sankey_", script_v, ".pdf"))
+orca(patent_flow_plot, file = paste0("data_viz\\Sankey_orca", script_v, ".pdf"), format = pdf)
 htmlwidgets::saveWidget(patent_flow_plot, file = paste0("data_viz\\Sankey org name_", script_v, "_", ".html"))
 
 
