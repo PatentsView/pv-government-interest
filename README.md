@@ -15,21 +15,23 @@ There are two steps involved in running codefiles:
 	a. To gather data, download the most updated bulk download datafiles from http://www.patentsview.org/download/ and save it to a folder 'data_to_read' in '2_Data_Viz_Generate'. 
 		These are the bulk download datafiles you will need:
 			1. uspatentcitation
-			2. patent
-			3. patent_govintorg
-			4. patent_inventor
-			5. patent_assignee
-			6. nber
-			7. wipo
-			8. wipo_field
-			9. government_organization
-			10. assignee
-			11. government_interest
-			12. rawassignee
+			2. usapplicationcitation
+			3. foreigncitation
+			4. patent
+			5. patent_govintorg
+			6. patent_inventor
+			7. patent_assignee
+			8. nber
+			9. wipo
+			10. wipo_field
+			11. government_organization
+			12. assignee
+			13. government_interest
+			14. rawassignee
 
-	b. Go to the folder '1_R_Data_Prep'. There should be 5 scripts in this folder that will help prepare the data for visualization. Open these scripts in R/RStudio. 
+	b. Go to the folder '1_R_Data_Prep'. There should be 6 scripts in this folder that will help prepare the data for visualization. Open these scripts in R/RStudio. 
 	
-	c. Make sure you change your working directory to match the folder path where you stored the bulk download files from part a above (Example folder path: *"yourpath/government-interest/2_Data_Viz_Generate/data_to_read"*).Then run through all of the R scripts in numerical order to generate tables 
+	c. Make sure you change your working directory to match the folder path where you stored the bulk download files from part a above (Example folder path: *"yourpath/government-interest/2_Data_Viz_Generate/data_to_read"*).Then run through all of the R scripts in numerical order to generate tables. 
 	
 	d. Save all the tables generated from running the scripts in '1_R_Data_Prep' in the folder 'data_to_read' under the folder '2_Data_Viz_Generate'. These tables include the following:
 			

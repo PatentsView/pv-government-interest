@@ -1,12 +1,12 @@
 library(dplyr)
 library(tidyr)
-
+library(data.table)
 #read in table
 temp_gi_assignee_type <- read.csv(file = "temp_gi_assignee_type.csv", header=TRUE, sep=",")
 temp_patent_level_gi <- read.csv(file = "temp_patent_level_gi.csv", header=TRUE, sep=",")
-patent_assignee <- read.csv(file = "patent_assignee.csv", header=TRUE, sep=",")
-assignee <- read.csv(file = "assignee.csv", header=TRUE, sep=",")
-rawassignee <- read.csv(file = "rawassignee.csv", header=TRUE, sep=",")
+patent_assignee <- fread(file = "patent_assignee.tsv", header=TRUE, sep="\t")
+assignee <- read.csv(file = "assignee.tsv", header=TRUE, sep="\t")
+rawassignee <- fread(file = "rawassignee.tsv", header=TRUE, sep="\t")
 ## create table with assignee type data
 ## this uses the new (Mar 9th) thesaurus
 
