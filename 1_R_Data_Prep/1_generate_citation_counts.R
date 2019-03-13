@@ -8,6 +8,8 @@ uspatentcitation <- fread(file = "uspatentcitation.tsv", header=TRUE, sep="\t", 
 patent <- fread(file = "patent.tsv", header=TRUE, sep="\t", quote = "")
 patent_govintorg <- fread(file = "patent_govintorg.tsv", header=TRUE, sep="\t")
 
+# file with num_times_cited_by_us_patents column
+patent_counts <- fread(file="temp_patents_counts.csv", header = TRUE, sep = ",")
 #For each patent, create the 5 year citation counts and weighted citation counts
 #Uses only the government relationships in the government interest table (not government assignees)
 #Does not require any other new tables to be pre-generated
@@ -18,13 +20,16 @@ patent_govintorg <- fread(file = "patent_govintorg.tsv", header=TRUE, sep="\t")
 
 ############################################################################
 patent_full = patent
-patent = patent_full %>% select(id, date, num_claims)
-patent_full = patent
-patent = patent_full %>% select(id, date, num_claims)
-uspat = read_csv_chunkwise("uspatentcitation.tsv", chunk_size=100000, header=TRUE, sep = "\t") %>% select(patent_id, citation_id) %>%
+patent = patent_full %>% select(id, date)
+
+# outer join with patent counts to get num_times_cited_by_us_patents field
+patent_combined = patent_counts %>% select(patent_id, num_us_patents_cited) %>% merge(., patent, by.x = "patent_id", by.y = "id", all=TRUE) %>%
+  rename(num_times_cited_by_us_patents = num_us_patents_cited) %>% rename(id = patent_id)
+patent = patent_combined
+
+uspat = read_csv_chunkwise("uspatentcitation.tsv", chunk_size=500000, header=TRUE, sep = "\t") %>% select(patent_id, citation_id) %>%
   # join 1 - for citing patents
   left_join (patent, by = c("patent_id" = "id")) %>% rename(citing_patent_date = date) %>% 
-  rename(num_times_cited_by_us_patents = num_claims) %>%
   select(patent_id, citation_id, citing_patent_date, num_times_cited_by_us_patents) %>%
   
    # join 2 for cited patents
@@ -33,8 +38,8 @@ uspat = read_csv_chunkwise("uspatentcitation.tsv", chunk_size=100000, header=TRU
   
   mutate(date_diff = difftime(citing_patent_date, cited_patent_date)) %>%
   filter(date_diff <= 365*5) %>%
-  select(patent_id, citation_id, citing_patent_date, cited_patent_date, num_times_cited_by_us_patents) %>%
-  write_csv_chunkwise("temp_5yr_citations_by_cite_subset.csv")
+  select(patent_id, citation_id, citing_patent_date, cited_patent_date, num_times_cited_by_us_patents.x, num_times_cited_by_us_patents.y) %>%
+  write_csv_chunkwise("temp_5yr_citations_by_cite_masterv2.csv")
 
 temp_all = read.csv("temp_5yr_citations_by_cite_subset.csv")
 temp_5yr_citations_by_cite_all = temp_all %>% select(patent_id, citation_id, citing_patent_date,

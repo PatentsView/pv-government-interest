@@ -6,13 +6,17 @@ library(data.table)
 patent_inventor <- fread(file = "patent_inventor.tsv", header=TRUE, sep="\t")
 patent_assignee <- fread(file = "patent_assignee.tsv", header=TRUE, sep="\t")
 nber <- fread(file = "nber.tsv", header=TRUE, sep="\t")
-wipo <- fread.csv(file = "wipo.tsv", header=TRUE, sep="\t")
+wipo <- fread(file = "wipo.tsv", header=TRUE, sep="\t")
 wipo_field <- read.csv(file = "wipo_field.tsv", header=TRUE, sep="\t")
+
 patent <- fread(file = "patent.tsv", header=TRUE, sep="\t", col.names = c("id", "type", "number", "country", 
                               "date", "abstract", "title", "kind", "num_claims", "filename", "withdrawn"))
 temp_5yr_citations <- read.csv(file = "temp_5yr_citations.csv", header=TRUE, sep=",")
 patent_govintorg <- fread(file = "patent_govintorg.tsv", header=TRUE, sep="\t")
 government_organization <- read.csv(file = "government_organization.tsv", header=TRUE, sep="\t")
+
+# file with num_times_cited_by_us_patents column
+patent_counts <- fread(file = "temp_patents_counts.csv", header = TRUE, sep = ",", verbose=TRUE )
 
 ## Create the main Patent Level and Government Interest Level tables
 ## These tables have a lot of details around the patents including information from the database
@@ -36,9 +40,11 @@ d <- patent_assignee %>%
 e <- c %>% left_join(d, by = "patent_id")
 
 w <- wipo %>% 
-      filter(sequence = 0) %>% 
+      filter(sequence == 0) %>% 
       right_join(e, by = "patent_id") %>% 
       rename(id = field_id)
+
+wipo_field$id = wipo_field$id %>% as.character()
 
 wf <- w %>% 
           left_join(wipo_field, by = "id") %>% 
