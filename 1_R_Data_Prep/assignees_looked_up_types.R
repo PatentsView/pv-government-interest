@@ -3,7 +3,7 @@ library(tidyr)
 library(stringr)
 library(purrr)
 library(data.table)
-
+library(chunked)
 academic = c()
 government= c()
 corporate = c()
@@ -87,45 +87,55 @@ re_hosp = str_c(cat["Hospital"][[1]], collapse="|")
 re_corp = str_c(cat["Corporate"][[1]], collapse = "|")
 re_institute = "institute"
 
+#assignee_script = fread("F:/Govt_Int/2018_Update/2018_Update_gov_int/data_to_read/assignee_type.csv", sep = ",", verbose = TRUE, header= TRUE)
+
+
 rawassignee = fread("G:/PatentsView/cssip/govtint_testing/rawassignee.tsv", sep = "\t", verbose = TRUE, header= TRUE)
 # keep only fields we need
 assignee = rawassignee %>% select(patent_id, type, organization)
  
-rm(rawassignee)
+check = assignee[1:15, "organization"]
 
+rm(rawassignee)
+assignee = assignee[1:1000]
 assignee$thes_type = NA
-counter = 0
-for(x in 1:nrow(assignee)){
-  text = assignee$organization[x]
-  if(counter %% 100000 == 0){
-    print(str_c("passed next 100,000 lines - counter: ", counter,sep=""))
-  }
-  re_type = NA
-  acad = grepl(re_acad, text)
-  gov = grepl(re_gov, text)
-  corp = grepl(re_corp, text)
-  hosp = grepl(re_hosp, text)
-  corp_institute = grepl(re_institute, text) & corp & acad
-  
-  if(text == "NULL"){
-    re_type = "Person"
-  }else if(corp_institute){
-    re_type = "Corporate"
-  }else if (acad){
-    re_type = "Academic"
-  }else if (gov){
-    re_type = "Government"
-  }else if (corp){
-    re_type = "Corporate"
-  }else if (hosp){
-    re_type = "Hospital"
-  }else{
-    re_type = "Ambiguous"
-  }
-  
-  assignee$thes_type[x] = re_type
-  counter = counter + 1
-}
+
+idx_list = c(1:nrow(assignee))
+idx_to_run = c()
+
+# ~ 66,797: any Null organizations = Persons
+null_idx = which(grepl("NULL", assignee$organization))
+assignee$thes_type[null_idx] = "Person"
+
+# acad ~ 211,604: set type of Academic orgs 
+idx_to_run = setdiff(idx_list, null_idx)
+acad_idx = which(grepl(re_acad, assignee$organization[idx_to_run]))
+assignee$thes_type[acad_idx] = "Academic"
+
+# gov ~ 47,428: set type of Gov orgs
+idx_to_run = setdiff(idx_to_run, acad_idx)
+gov_idx = which(grepl(re_gov, assignee$organization[idx_to_run]))
+assignee$thes_type[gov_idx] = "Government"
+
+# ~ 4,354,349: set type of Corp orgs
+idx_to_run = setdiff(idx_to_run, gov_idx)
+corp_idx = which(grepl(re_corp, assignee$organization[idx_to_run]))
+assignee$thes_type[corp_idx] = "Corporate"
+
+# ~ 2300: set type of Hospital orgs
+idx_to_run = setdiff(idx_to_run, corp_idx)
+hosp_idx = which(grepl(re_hosp, assignee$organization[idx_to_run]))
+assignee$thes_type[hosp_idx] = "Hospital"
+
+# set type of corporation institutes
+idx_to_run = setdiff(idx_to_run, hosp_idx)
+corp_institute_idx = union(c(which(grepl(re_institute, assignee$organization[idx_to_run]))), acad_idx) %>% intersect(acad_idx)
+assignee$thes_type[corp_institute_idx] = "Corporate"
+
+# set type of orgs not falling into other categories - ambiguous
+idx_to_run = setdiff(idx_to_run, corp_institute_idx)
+ambig_idx = which(is.na(assignee$thes_type[idx_to_run]))
+assignee$thes_type[ambig_idx] = "Ambiguous"
 
 
 fwrite(assignee, "assignees_lookedup_types_r.csv", sep = ",")
