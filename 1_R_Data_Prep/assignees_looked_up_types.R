@@ -157,10 +157,10 @@ patent_govintorg <- fread(file = "G:/PatentsView/cssip/govtint_testing/patent_go
 ## each row is a patent and each patent appears only once
 govint_distinct_id <- patent_govintorg %>% distinct(patent_id)
 
-temp_patent_level_gi <- assignee %>% 
+temp_gi_assignee_type <- assignee %>% 
   filter(patent_id %in% govint_distinct_id$patent_id)
 
-
+fwrite(temp_gi_assignee_type, "G:/PatentsView/cssip/govtint_testing/temp_gi_assignee_type.csv", sep = ",")
 
 
 

@@ -1,7 +1,7 @@
 # read in table
 temp_inventor_gender <- fread(file = "inventor_gender.tsv", header=TRUE, sep="\t")
 temp_patent_level_gi <- read.csv(file = "temp_patent_level_gi.csv", header=TRUE, sep=",")
-patent_inventor <- read.csv(file = "patent_inventor.csv", header=TRUE, sep=",")
+patent_inventor <- fread(file = "patent_inventor.tsv", header=TRUE, sep="\t")
 #temp_govt_associated_inventors_clean <- read.csv(file = "temp_govt_associated_inventors_clean.csv", header=TRUE, sep=",")
 
 ## Inventor gender data 
@@ -11,8 +11,7 @@ patent_inventor <- read.csv(file = "patent_inventor.csv", header=TRUE, sep=",")
 ## the existing temp_inventor_gender is the results the italians produced, uploaded ot mysql 
 
 a <- temp_patent_level_gi %>% select(patent_id)
-g <- temp_inventor_gender %>% select(disamb_inventor_id_20181127, male) %>%
-      rename(inventor_id = disamb_inventor_id_20181127) %>% 
+g <- temp_inventor_gender %>% rename(inventor_id = disamb_inventor_id_20181127) %>% select(inventor_id, male) %>%
       filter(!is.na(inventor_id))
 
 patent_id_filter_lst <- a %>% 

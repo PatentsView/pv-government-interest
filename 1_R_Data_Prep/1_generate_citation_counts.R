@@ -9,7 +9,7 @@ patent <- fread(file = "patent.tsv", header=TRUE, sep="\t", quote = "")
 patent_govintorg <- fread(file = "patent_govintorg.tsv", header=TRUE, sep="\t")
 
 # file with num_times_cited_by_us_patents column
-patent_counts <- fread(file="temp_patents_counts.csv", header = TRUE, sep = ",")
+patent_counts <- fread(file="temp_patent_counts_fac_vfinal.csv", header = TRUE, sep = ",")
 #For each patent, create the 5 year citation counts and weighted citation counts
 #Uses only the government relationships in the government interest table (not government assignees)
 #Does not require any other new tables to be pre-generated
