@@ -3,14 +3,14 @@ library(tidyr)
 library(data.table)
 
 #read in table
-patent_inventor <- fread(file = "patent_inventor.tsv", header=TRUE, sep="\t")
-patent_assignee <- fread(file = "patent_assignee.tsv", header=TRUE, sep="\t")
+patent_inventor <- fread(file = "patent_inventor.tsv", header=TRUE, sep="\t", verbose=TRUE)
+patent_assignee <- fread(file = "patent_assignee.tsv", header=TRUE, sep="\t", verbose=TRUE)
 nber <- fread(file = "nber.tsv", header=TRUE, sep="\t")
 wipo <- fread(file = "wipo.tsv", header=TRUE, sep="\t")
 wipo_field <- read.csv(file = "wipo_field.tsv", header=TRUE, sep="\t")
 
 patent <- fread(file = "patent.tsv", header=TRUE, sep="\t", col.names = c("id", "type", "number", "country", 
-                              "date", "abstract", "title", "kind", "num_claims", "filename", "withdrawn"))
+                              "date", "abstract", "title", "kind", "num_claims", "filename", "withdrawn"), verbose=TRUE)
 temp_5yr_citations <- read.csv(file = "temp_5yr_citations.csv", header=TRUE, sep=",")
 patent_govintorg <- fread(file = "patent_govintorg.tsv", header=TRUE, sep="\t")
 government_organization <- read.csv(file = "government_organization.tsv", header=TRUE, sep="\t")

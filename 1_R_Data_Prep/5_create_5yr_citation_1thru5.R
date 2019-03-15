@@ -6,8 +6,6 @@ uspatentcitation <- read.csv(file = "uspatentcitation.csv", header=TRUE, sep=","
 government_interest <- read.csv(file = "government_interest.csv", header=TRUE, sep=",")
 patent <- read.csv(file = "patent.csv", header=TRUE, sep=",")
 
-
-
 ## table with each government interest patent and any citations within 5 years -- for each year 1 thru 5 (changed by ska)
 ## patent_20180528.temp_updated_gi is the table with all the government interest and government assignee patents
 distinct_patent_id <- government_interest %>% distinct(patent_id)

@@ -94,10 +94,10 @@ rawassignee = fread("G:/PatentsView/cssip/govtint_testing/rawassignee.tsv", sep 
 # keep only fields we need
 assignee = rawassignee %>% select(patent_id, type, organization)
  
-check = assignee[1:15, "organization"]
+#check = assignee[1:15, "organization"]
 
 rm(rawassignee)
-assignee = assignee[1:1000]
+
 assignee$thes_type = NA
 
 idx_list = c(1:nrow(assignee))
@@ -108,35 +108,60 @@ null_idx = which(grepl("NULL", assignee$organization))
 assignee$thes_type[null_idx] = "Person"
 
 # acad ~ 211,604: set type of Academic orgs 
-idx_to_run = setdiff(idx_list, null_idx)
-acad_idx = which(grepl(re_acad, assignee$organization[idx_to_run]))
+acad_idx = which(grepl(re_acad, assignee$organization))
 assignee$thes_type[acad_idx] = "Academic"
 
-# gov ~ 47,428: set type of Gov orgs
-idx_to_run = setdiff(idx_to_run, acad_idx)
-gov_idx = which(grepl(re_gov, assignee$organization[idx_to_run]))
-assignee$thes_type[gov_idx] = "Government"
-
 # ~ 4,354,349: set type of Corp orgs
-idx_to_run = setdiff(idx_to_run, gov_idx)
-corp_idx = which(grepl(re_corp, assignee$organization[idx_to_run]))
+corp_idx = which(grepl(re_corp, assignee$organization))
 assignee$thes_type[corp_idx] = "Corporate"
 
-# ~ 2300: set type of Hospital orgs
-idx_to_run = setdiff(idx_to_run, corp_idx)
-hosp_idx = which(grepl(re_hosp, assignee$organization[idx_to_run]))
-assignee$thes_type[hosp_idx] = "Hospital"
-
 # set type of corporation institutes
-idx_to_run = setdiff(idx_to_run, hosp_idx)
-corp_institute_idx = union(c(which(grepl(re_institute, assignee$organization[idx_to_run]))), acad_idx) %>% intersect(acad_idx)
+corp_institute_idx = intersect(c(which(grepl(re_institute, assignee$organization[idx_to_run]))), acad_idx) %>% intersect(corp_idx)
 assignee$thes_type[corp_institute_idx] = "Corporate"
 
+
+# gov ~ 47,428: set type of Gov orgs
+gov_idx = which(grepl(re_gov, assignee$organization))
+assignee$thes_type[gov_idx] = "Government"
+
+# ~ 2300: set type of Hospital orgs
+hosp_idx = which(grepl(re_hosp, assignee$organization))
+assignee$thes_type[hosp_idx] = "Hospital"
+
 # set type of orgs not falling into other categories - ambiguous
-idx_to_run = setdiff(idx_to_run, corp_institute_idx)
-ambig_idx = which(is.na(assignee$thes_type[idx_to_run]))
+idx_to_run = setdiff(idx_to_run, hosp_idx)
+ambig_idx = which(is.na(assignee$thes_type))
 assignee$thes_type[ambig_idx] = "Ambiguous"
 
+assignee_prev = fread("G:/PatentsView/cssip/govtint_testing/assignees_lookedup_types_prev.csv", sep=",")
+assignee_prev = assignee_prev %>% select(patent_id, type, organization, thes_types)
+assignee_match_idx = match(assignee_prev$patent_id, assignee$patent_id)
 
-fwrite(assignee, "assignees_lookedup_types_r.csv", sep = ",")
+check = assignee[assignee_match_idx]
+
+assignee_prev = assignee_prev %>% arrange(organization)
+check = check %>% arrange(organization)
+
+all.equal(assignee_prev, check)
+
+
+fwrite(assignee, "assignees_lookedup_types_r_v3_testing.csv", sep = ",")
+
+# temp_gi_assignee_type.csv generation for script 3
+############################################################################
+##  Government Interest Patents
+############################################################################
+patent_govintorg <- fread(file = "G:/PatentsView/cssip/govtint_testing/patent_govintorg.tsv", header=TRUE, sep="\t")
+
+## table of just GI patents
+## each row is a patent and each patent appears only once
+govint_distinct_id <- patent_govintorg %>% distinct(patent_id)
+
+temp_patent_level_gi <- assignee %>% 
+  filter(patent_id %in% govint_distinct_id$patent_id)
+
+
+
+
+
 

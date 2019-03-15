@@ -1,5 +1,5 @@
 # read in table
-temp_inventor_gender <- read.csv(file = "temp_inventor_gender.csv", header=TRUE, sep=",")
+temp_inventor_gender <- fread(file = "inventor_gender.tsv", header=TRUE, sep="\t")
 temp_patent_level_gi <- read.csv(file = "temp_patent_level_gi.csv", header=TRUE, sep=",")
 patent_inventor <- read.csv(file = "patent_inventor.csv", header=TRUE, sep=",")
 #temp_govt_associated_inventors_clean <- read.csv(file = "temp_govt_associated_inventors_clean.csv", header=TRUE, sep=",")
@@ -11,8 +11,8 @@ patent_inventor <- read.csv(file = "patent_inventor.csv", header=TRUE, sep=",")
 ## the existing temp_inventor_gender is the results the italians produced, uploaded ot mysql 
 
 a <- temp_patent_level_gi %>% select(patent_id)
-g <- temp_inventor_gender %>% 
-      rename(inventor_id = id) %>% 
+g <- temp_inventor_gender %>% select(disamb_inventor_id_20181127, male) %>%
+      rename(inventor_id = disamb_inventor_id_20181127) %>% 
       filter(!is.na(inventor_id))
 
 patent_id_filter_lst <- a %>% 
@@ -21,14 +21,14 @@ patent_id_filter_lst <- a %>%
 
 temp_govt_associated_inventors_clean <- patent_inventor %>% 
                                             filter(patent_id %in% patent_id_filter_lst$patent_id) %>% 
-                                            select(patent_id, inventor_id, dumale)
+                                            select(patent_id, inventor_id, male)
 
 write.csv(temp_govt_associated_inventors_clean, file = "temp_govt_associated_inventors_clean.csv")
 
 
 
 ## create table temp_gi_inventor_gender
-tg <- temp_govt_associated_inventors_clean %>% filter(!is.na(dumale)) %>%  select(patent_id, inventor_id, dumale)
+tg <- temp_govt_associated_inventors_clean %>% filter(!is.na(male)) %>%  select(patent_id, inventor_id, male)
 temp_gi_inventor_gender <- temp_patent_level_gi %>% 
                              select(patent_id, num_inventors, year, wipo_sector, wipo_field) %>% 
                              left_join(tg, by ="patent_id")
@@ -36,9 +36,9 @@ write.csv(temp_gi_inventor_gender, file = "temp_gi_inventor_gender.csv")
 
 ## create table 
 temp_gi_has_female_inv <- temp_gi_inventor_gender %>% 
-                            select(patent_id, dumale) %>% 
+                            select(patent_id, male) %>% 
                             group_by(patent_id) %>% 
-                            summarise(gender_min = min(dumale)) %>% 
+                            summarise(gender_min = min(male)) %>% 
                             mutate(has_fem_inv = ifelse(gender_min == 0, 1, 0)) %>% 
                             select(patent_id, has_fem_inv)
 
