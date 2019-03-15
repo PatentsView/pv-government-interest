@@ -1,9 +1,5 @@
-library(dplyr)
-library(tidyr)
-library(stringr)
-library(purrr)
-library(data.table)
-library(chunked)
+source("requirements.R")
+
 academic = c()
 government= c()
 corporate = c()
@@ -133,16 +129,13 @@ idx_to_run = setdiff(idx_to_run, hosp_idx)
 ambig_idx = which(is.na(assignee$thes_type))
 assignee$thes_type[ambig_idx] = "Ambiguous"
 
-assignee_prev = fread("G:/PatentsView/cssip/govtint_testing/assignees_lookedup_types_prev.csv", sep=",")
-assignee_prev = assignee_prev %>% select(patent_id, type, organization, thes_types)
-assignee_match_idx = match(assignee_prev$patent_id, assignee$patent_id)
-
-check = assignee[assignee_match_idx]
-
-assignee_prev = assignee_prev %>% arrange(organization)
-check = check %>% arrange(organization)
-
-all.equal(assignee_prev, check)
+# assignee_prev = fread("G:/PatentsView/cssip/govtint_testing/assignees_lookedup_types_prev.csv", sep=",")
+# assignee_prev = assignee_prev %>% select(patent_id, type, organization, thes_types)
+# assignee_match_idx = match(assignee_prev$patent_id, assignee$patent_id)
+# check = assignee[assignee_match_idx]
+# assignee_prev = assignee_prev %>% arrange(organization)
+# check = check %>% arrange(organization)
+# all.equal(assignee_prev, check)
 
 
 fwrite(assignee, "assignees_lookedup_types_r_v3_testing.csv", sep = ",")

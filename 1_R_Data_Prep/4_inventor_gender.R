@@ -10,15 +10,21 @@ patent_inventor <- fread(file = "patent_inventor.tsv", header=TRUE, sep="\t")
 
 ## the existing temp_inventor_gender is the results the italians produced, uploaded ot mysql 
 
-a <- temp_patent_level_gi %>% select(patent_id)
+a <- temp_patent_level_gi %>% select(patent_id, inventor_id)
 g <- temp_inventor_gender %>% rename(inventor_id = disamb_inventor_id_20181127) %>% select(inventor_id, male) %>%
       filter(!is.na(inventor_id))
 
+a$inventor_id = a$inventor_id %>% as.character()
+g$inventor_id = g$inventor_id %>% as.character()
 patent_id_filter_lst <- a %>% 
                           left_join(g, by = "inventor_id") %>% 
                           select(patent_id)
 
-temp_govt_associated_inventors_clean <- patent_inventor %>% 
+
+patent_inventor_gender = g %>% left_join(patent_inventor, by = c("inventor_id" = "inventor_id")) 
+
+
+temp_govt_associated_inventors_clean <- patent_inventor_gender %>% 
                                             filter(patent_id %in% patent_id_filter_lst$patent_id) %>% 
                                             select(patent_id, inventor_id, male)
 
@@ -28,8 +34,10 @@ write.csv(temp_govt_associated_inventors_clean, file = "temp_govt_associated_inv
 
 ## create table temp_gi_inventor_gender
 tg <- temp_govt_associated_inventors_clean %>% filter(!is.na(male)) %>%  select(patent_id, inventor_id, male)
+tg$patent_id = tg$patent_id %>% as.character()
+temp_patent_level_gi$patent_id = temp_patent_level_gi$patent_id %>% as.character()
 temp_gi_inventor_gender <- temp_patent_level_gi %>% 
-                             select(patent_id, num_inventors, year, wipo_sector, wipo_field) %>% 
+                             select(patent_id, num_inventors, date, wipo_sector, wipo_field) %>% 
                              left_join(tg, by ="patent_id")
 write.csv(temp_gi_inventor_gender, file = "temp_gi_inventor_gender.csv")
 

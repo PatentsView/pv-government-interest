@@ -1,7 +1,4 @@
-library(data.table)
-library(dplyr)
-
-#library(microbenchmark)
+source("requirements.R")
 
 # 1. read in foreigncitation, usapplicationcitation, and uspatentcitation tables separately
 # 2. prepare the counts
@@ -12,7 +9,7 @@ foreigncitation <- fread(file = "foreigncitation.tsv", header=TRUE, sep="\t", qu
 foreigncit_tf = foreigncitation %>% select(patent_id) %>% group_by(patent_id) %>% 
   mutate(num_foreign_documents_cited = n()) %>% unique()
 
-fwrite(foreigncit_tf, "temp_num_foreign_documents_cited.csv", sep=",")
+fwrite(foreigncit_tf, "full_testing/temp_num_foreign_documents_cited.csv", sep=",")
 
 # remove from memory to free up space
 rm(foreigncitation)
@@ -23,7 +20,7 @@ usappcitation <- fread("usapplicationcitation.tsv",header=TRUE, sep="\t",quote="
 usappcit_tf = usappcitation %>% select(patent_id) %>% group_by(patent_id) %>% 
   mutate(num_us_applications_cited=n()) %>% unique()
 
-fwrite(usappcit_tf, "temp_num_us_applications_cited.csv", sep=",")
+fwrite(usappcit_tf, "full_testing/temp_num_us_applications_cited.csv", sep=",")
 
 # remove from memory to free up space
 rm(usappcitation)
@@ -38,8 +35,8 @@ uspatcit_tf = uspatentcitation %>% select(patent_id) %>% group_by(patent_id) %>%
 cit_by_uspat_tf = uspatentcitation %>% select(citation_id) %>% group_by(citation_id) %>% 
   mutate(num_times_cited_by_us_patents = n()) %>% unique()
 
-fwrite(uspatcit_tf, "temp_num_us_patents_cited.csv", sep=",")
-fwrite(cit_by_uspat_tf, "temp_num_times_cited_by_us_patents.csv", sep=",")
+fwrite(uspatcit_tf, "full_testing/temp_num_us_patents_cited.csv", sep=",")
+fwrite(cit_by_uspat_tf, "full_testing/temp_num_times_cited_by_us_patents.csv", sep=",")
 
 
 # remove from memory to free up space
@@ -52,7 +49,4 @@ merge_foreign_app = merge(foreigncit_tf, usappcit_tf, by=c("patent_id" = "patent
 merge_patcit_citbyuspat = merge(uspatcit_tf, cit_by_uspat_tf, by.x = "patent_id", by.y = "citation_id", all = TRUE)
 patent_counts_final = merge(merge_foreign_app, merge_patcit_citbyuspat, by=c("patent_id" = "patent_id"), all=TRUE)
 
-fwrite(patent_counts_final, "temp_patent_counts_fac_vfinal.csv", sep=",")
-
-#merge1 = microbenchmark( merge(tf_uniq, appcit_tf_uniq, by=c("patent_id" = "patent_id"), all = TRUE), times=2)
-#merge1$time[1] / 10^-9
+fwrite(patent_counts_final, "full_testing/temp_patent_counts_fac_vfinal.csv", sep=",")

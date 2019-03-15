@@ -95,7 +95,7 @@ write.csv(temp_patent_level_gi, file = "temp_patent_level_gi_subset.csv")
 ## government-interest level table of just GI Patents
 temp_gi_level_gi <- patent_govintorg %>%
                       left_join(government_organization, by ="organization_id")
-
+fwrite(temp_gi_level_gi, file="temp_gi_level_gi_subset.csv", sep = ",")
 ############################################################################
 ##  Non Government Interest Patents
 ############################################################################

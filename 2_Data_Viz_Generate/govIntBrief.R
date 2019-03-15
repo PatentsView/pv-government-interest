@@ -3,26 +3,25 @@
 # march 2017
 # check for supporting docs and code in github or on the patentsview shared drive 
 
-source("requirements.R")
+#source("requirements.R")
 
 script_v <- "3.0"
 #########################################################################################################
 
-
-#in.patent_level <- read.csv("data_to_read\\temp_patent_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
-#in.gov_level <- read.csv("data_to_read\\temp_gi_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
-#in.all <- read.csv("data_to_read\\temp_patent_level_all", header = TRUE, stringsAsFactors = FALSE)
-#in.assignees.all <- read.csv("data_to_read\\all_assignees", header = TRUE, stringsAsFactors = FALSE)
-#in.cite_1 <- read.csv("data_to_read\\temp_5yr_citations_by_cite_yr1", header = TRUE, stringsAsFactors = FALSE)
-#in.cite_2 <- read.csv("data_to_read\\temp_5yr_citations_by_cite_yr2", header = TRUE, stringsAsFactors = FALSE)
-#in.cite_3 <- read.csv("data_to_read\\temp_5yr_citations_by_cite_yr3", header = TRUE, stringsAsFactors = FALSE)
-#in.cite_4 <- read.csv("data_to_read\\temp_5yr_citations_by_cite_yr4", header = TRUE, stringsAsFactors = FALSE)
-#in.cite_5 <- read.csv("data_to_read\\temp_5yr_citations_by_cite_yr5", header = TRUE, stringsAsFactors = FALSE)
+in.patent_level <- read.csv("data_to_read\\temp_patent_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
+in.gov_level <- read.csv("data_to_read\\temp_gi_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
+in.all <- read.csv("data_to_read\\temp_patent_level_all.csv", header = TRUE, stringsAsFactors = FALSE)
+in.assignees.all <- read.csv("data_to_read\\all_assignees.csv", header = TRUE, stringsAsFactors = FALSE)
+in.cite_1 <- read.csv("data_to_read\\temp_5yr_citations_yr1.csv", header = TRUE, stringsAsFactors = FALSE)
+in.cite_2 <- read.csv("data_to_read\\temp_5yr_citations_yr2.csv", header = TRUE, stringsAsFactors = FALSE)
+in.cite_3 <- read.csv("data_to_read\\temp_5yr_citations_yr3.csv", header = TRUE, stringsAsFactors = FALSE)
+in.cite_4 <- read.csv("data_to_read\\temp_5yr_citations_yr4.csv", header = TRUE, stringsAsFactors = FALSE)
+in.cite_5 <- read.csv("data_to_read\\temp_5yr_citations_yr5.csv", header = TRUE, stringsAsFactors = FALSE)
 
 
 ### read in tables from local file(not exist in db)
 in.sector <- read.csv("data_to_read\\assignees_lookedup_types.csv", header = TRUE, stringsAsFactors = FALSE)
-in.fund <- read.csv("data_to_read\\Agencies.csv", header = TRUE, stringsAsFactors = FALSE)
+in.fund <- read.csv("data_to_read\\agencies.csv", header = TRUE, stringsAsFactors = FALSE)
 in.size <- read.csv("data_to_read\\government_interest_patents_1980-2018_returned.csv", header = TRUE, stringsAsFactors = FALSE)
 #########################################################################################################
 
@@ -30,7 +29,7 @@ in.size <- read.csv("data_to_read\\government_interest_patents_1980-2018_returne
 
 # these government interest patents have some full text fields that contain organizations; not fixing here
 # process patent level data
-in.patent_level <- in.patent_level %>% filter(year != "NULL" & year >= 1980 & year <= 2017) # filter on years 
+in.patent_level <- in.patent_level %>% mutate(year = year(date)) %>% filter(year != "NULL" & year >= 1980 & year <= 2017) # filter on years 
 patents.keep_ids <- in.patent_level$patent_id                    
 #write.csv(patents.keep_ids, file="out\\patents.keep_ids.csv")
 

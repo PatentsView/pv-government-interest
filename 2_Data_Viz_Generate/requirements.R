@@ -16,7 +16,7 @@ install_pkgs <- function(pkg) {
 
 # load library packages
 pkg_list <- c("trend", "plyr", "scales", "MASS", "reshape", "tools", "plotly", "rjson",
-              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont", "Cairo", "processx")
+              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont", "Cairo", "processx", "lubridate")
 
 lapply(pkg_list, install_pkgs)
 
