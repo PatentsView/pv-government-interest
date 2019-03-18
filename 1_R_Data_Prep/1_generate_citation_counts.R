@@ -1,7 +1,10 @@
-library(dplyr)
-library(tidyr)
-library(data.table)
-library(chunked)
+source("requirements.R")
+
+
+# input and output folder paths
+input_folder = ""
+output_folder = "full_testing/"
+
 
 # read in relevant data
 uspatentcitation <- fread(file = "uspatentcitation.tsv", header=TRUE, sep="\t", quote="")
@@ -9,7 +12,7 @@ patent <- fread(file = "patent.tsv", header=TRUE, sep="\t", quote = "")
 patent_govintorg <- fread(file = "patent_govintorg.tsv", header=TRUE, sep="\t")
 
 # file with num_times_cited_by_us_patents column
-patent_counts <- fread(file="temp_patent_counts_fac_vfinal.csv", header = TRUE, sep = ",")
+patent_counts <- fread(file="G:/PatentsView/cssip/govtint_testing/full_testing/temp_patent_counts_fac_vfinal.csv", header = TRUE, sep = ",")
 #For each patent, create the 5 year citation counts and weighted citation counts
 #Uses only the government relationships in the government interest table (not government assignees)
 #Does not require any other new tables to be pre-generated
@@ -29,8 +32,9 @@ patent_combined = patent_counts %>% select(patent_id, num_us_patents_cited) %>% 
 patent_before_merge = patent
 patent = patent_combined
 
-temp_5yr_citations_by_cite_all = #read_csv_chunkwise("uspatentcitation.tsv", chunk_size=500000, header=TRUE, sep = "\t") %>% 
-   uspatentcitation %>%
+#fwrite(patent, "full_testing/temp_patcounts_pat_merged.csv", sep = ",")
+temp_5yr_citations_by_cite_all = read_csv_chunkwise("uspatentcitation.tsv", chunk_size=500000, header=TRUE, sep = "\t") %>% 
+   #uspatentcitation %>%
   select(patent_id, citation_id) %>%
   
   # join 1 - for citing patents
@@ -44,12 +48,12 @@ temp_5yr_citations_by_cite_all = #read_csv_chunkwise("uspatentcitation.tsv", chu
   mutate(date_diff = difftime(citing_patent_date, cited_patent_date)) %>%
   filter(date_diff <= 365*5) %>%
   select(patent_id, citation_id, citing_patent_date, cited_patent_date, num_times_cited_by_us_patents.x) %>%
-  rename(num_times_cited_by_us_patents = num_times_cited_by_us_patents.x) #%>% write_csv_chunkwise("temp_5yr_citations_by_cite_masterv2.csv")
+  rename(num_times_cited_by_us_patents = num_times_cited_by_us_patents.x) %>% write_csv_chunkwise("full_testing/temp_5yr_citations_by_cite_full.csv")
 
 #write.csv(temp_5yr_citations_by_cite_all, "temp_5yr_citations_by_cite_subset.csv")
-write.csv(temp_5yr_citations_by_cite_all, "temp_5yr_citations_by_cite_all.csv")
-
-
+#write.csv(temp_5yr_citations_by_cite_all, "temp_5yr_citations_by_cite_all.csv")
+# 8:35pm to 1:43am 
+temp_5yr_citations_by_cite_all = fread("full_testing/temp_5yr_citations_by_cite_full.csv", sep = ",")
 ## derivative table with 5 year citation counts and weighted citation count
 temp_5yr_citations_all_1 <- temp_5yr_citations_by_cite_all %>% 
                               group_by(citation_id) %>% 
@@ -64,7 +68,7 @@ temp_5yr_citations_all_2 <- temp_5yr_citations_by_cite_all %>%
 temp_5yr_citations_all <- temp_5yr_citations_all_1 %>% 
                             inner_join(temp_5yr_citations_all_2, by = "citation_id")
 
-write.csv(temp_5yr_citations_all, file = "temp_5yr_citations_all_subset.csv")
+fwrite(temp_5yr_citations_all, file = "full_testing/temp_5yr_citations_all_subset.csv", sep = ",")
 ############################################################################
 ##  Government Interest Patents
 ############################################################################
@@ -77,7 +81,7 @@ distinct_patent_id <- patent_govintorg %>% distinct(patent_id)
 temp_5yr_citations_by_cite <- temp_5yr_citations_by_cite_all %>% 
                               filter(citation_id %in% distinct_patent_id$patent_id)
 
-write.csv(temp_5yr_citations_by_cite, file = "temp_5yr_citations_by_cite_subset.csv")
+fwrite(temp_5yr_citations_by_cite, file = "full_testing/temp_5yr_citations_by_cite_gi.csv", sep=",")
 
 ## derivative table with 5 year citation counts and weighted citation count
 temp_5yr_citations_1 <- temp_5yr_citations_by_cite %>% 
@@ -93,5 +97,5 @@ temp_5yr_citations_2 <- temp_5yr_citations_by_cite %>%
 temp_5yr_citations <- temp_5yr_citations_1 %>% 
                               inner_join(temp_5yr_citations_2, by = "citation_id")
 
-write.csv(temp_5yr_citations, file = "temp_5yr_citations.csv")
+write.csv(temp_5yr_citations, file = str_c(output_folder, "temp_5yr_citations_gi.csv", sep = ""))
 

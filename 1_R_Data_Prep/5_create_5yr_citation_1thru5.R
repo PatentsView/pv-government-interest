@@ -1,17 +1,17 @@
-library(dplyr)
-library(tidyr)
+source("requirements.R")
+
+# input and output folder paths
+input_folder = "G:/PatentsView/cssip/govtint_testing/"
+output_folder = "full_testing/"
 
 #read in table
-uspatentcitation <- fread(file = "uspatentcitation.tsv", header=TRUE, sep="\t")
+uspatentcitation <- fread(file = str_c(input_folder,"uspatentcitation.tsv"), header=TRUE, sep="\t", quote = "")
 government_interest <- read.csv(file = "government_interest.tsv", header=TRUE, sep="\t")
-patent <- fread(file = "patent.tsv", header=TRUE, sep="\t")
-# file with num_times_cited_by_us_patents column
-patent_counts <- fread(file = "temp_patent_counts_fac_vfinal.csv", header = TRUE, sep = ",", verbose=TRUE )
 
-# combine patent and patent_counts together
-# outer join with patent counts to get num_times_cited_by_us_patents field
-patent_combined = patent_counts %>% merge(., patent, by.x = "patent_id", by.y = "id", all=TRUE) 
-patent = patent_combined
+
+# patent counts and patent merged table
+patent = fread(file=str_c(output_folder,"temp_patent_counts_patent_merged.csv"), header=TRUE, sep=",", verbose=TRUE)
+
 
 ## table with each government interest patent and any citations within 5 years -- for each year 1 thru 5 (changed by ska)
 ## patent_20180528.temp_updated_gi is the table with all the government interest and government assignee patents
@@ -29,10 +29,12 @@ c <- b %>%
         rename(cited_patent_date = date, num_times_cited_by_us_patents = num_times_cited_by_us_patents.x) %>% 
         select(citation_id, patent_id, cited_patent_date, citing_patent_date, num_times_cited_by_us_patents)
 
+fwrite(c, "temp_c_script5.csv")
+
 ## year 5
 temp_5yr_citations_by_cite_yr5 <- c %>% 
-          mutate(date_diff = difftime(citing_patent_date,cited_patent_date)) %>% 
-          filter(date_diff <= 365 * 5 && date_diff >365 * 4) %>% 
+          mutate(date_diff = as.integer(difftime(citing_patent_date,cited_patent_date))) %>% 
+          filter(date_diff <= 365 * 5 & date_diff >365 * 4) %>% 
           select(citation_id, patent_id, cited_patent_date, 
                  citing_patent_date, num_times_cited_by_us_patents)
 
@@ -53,8 +55,8 @@ temp_5yr_citations_yr5 <- temp_5yr_citations_yr5_1 %>%
 
 ## year 4
 temp_5yr_citations_by_cite_yr4 <- c %>% 
-  mutate(date_diff = difftime(citing_patent_date,cited_patent_date)) %>% 
-  filter(date_diff <= 365 * 4 && date_diff >365 * 3) %>% 
+  mutate(date_diff = as.integer(difftime(citing_patent_date,cited_patent_date))) %>% 
+  filter(date_diff <= 365 * 4 & date_diff > 365 * 3) %>% 
   select(citation_id, patent_id, cited_patent_date, 
          citing_patent_date, num_times_cited_by_us_patents)
 
@@ -75,8 +77,8 @@ temp_5yr_citations_yr4 <- temp_5yr_citations_yr4_1 %>%
 
 ## year 3
 temp_5yr_citations_by_cite_yr3 <- c %>% 
-  mutate(date_diff = difftime(citing_patent_date,cited_patent_date)) %>% 
-  filter(date_diff <= 365 * 3 && date_diff >365 * 2) %>% 
+  mutate(date_diff = as.integer(difftime(citing_patent_date,cited_patent_date))) %>% 
+  filter(date_diff <= 365 * 3 & date_diff > 365 * 2) %>% 
   select(citation_id, patent_id, cited_patent_date, 
          citing_patent_date, num_times_cited_by_us_patents)
 
@@ -97,8 +99,8 @@ temp_5yr_citations_yr3 <- temp_5yr_citations_yr3_1 %>%
 
 ## year 2
 temp_5yr_citations_by_cite_yr2 <- c %>% 
-  mutate(date_diff = difftime(citing_patent_date,cited_patent_date)) %>% 
-  filter(date_diff <= 365 * 2 && date_diff >365 * 1) %>% 
+  mutate(date_diff = as.integer(difftime(citing_patent_date,cited_patent_date))) %>% 
+  filter(date_diff <= 365 * 2 & date_diff >365 * 1) %>% 
   select(citation_id, patent_id, cited_patent_date, 
          citing_patent_date, num_times_cited_by_us_patents)
 
@@ -119,7 +121,7 @@ temp_5yr_citations_yr2 <- temp_5yr_citations_yr2_1 %>%
 
 ## year 1
 temp_5yr_citations_by_cite_yr1 <- c %>% 
-  mutate(date_diff = difftime(citing_patent_date,cited_patent_date)) %>% 
+  mutate(date_diff = as.integer(difftime(citing_patent_date,cited_patent_date))) %>% 
   filter(date_diff < 365 * 2) %>% 
   select(citation_id, patent_id, cited_patent_date, 
          citing_patent_date, num_times_cited_by_us_patents)
@@ -139,8 +141,8 @@ temp_5yr_citations_yr1_2 <- temp_5yr_citations_by_cite_yr1 %>%
 temp_5yr_citations_yr1 <- temp_5yr_citations_yr1_1 %>% 
   inner_join(temp_5yr_citations_yr1_2, by = "patent_id")
 
-write.csv(temp_5yr_citations_yr5, file = "temp_5yr_citations_yr5.csv")
-write.csv(temp_5yr_citations_yr4, file = "temp_5yr_citations_yr4.csv")
-write.csv(temp_5yr_citations_yr3, file = "temp_5yr_citations_yr3.csv")
-write.csv(temp_5yr_citations_yr2, file = "temp_5yr_citations_yr2.csv")
-write.csv(temp_5yr_citations_yr1, file = "temp_5yr_citations_yr1.csv")
+write.csv(temp_5yr_citations_yr5, file = str_c(output_folder,"temp_5yr_citations_yr5.csv"))
+write.csv(temp_5yr_citations_yr4, file = str_c(output_folder,"temp_5yr_citations_yr4.csv"))
+write.csv(temp_5yr_citations_yr3, file = str_c(output_folder,"temp_5yr_citations_yr3.csv"))
+write.csv(temp_5yr_citations_yr2, file = str_c(output_folder,"temp_5yr_citations_yr2.csv"))
+write.csv(temp_5yr_citations_yr1, file = str_c(output_folder,"temp_5yr_citations_yr1.csv"))
