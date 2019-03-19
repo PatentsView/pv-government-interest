@@ -1,12 +1,8 @@
 source("requirements.R")
 
-# input and output folder paths
-input_folder = "G:/PatentsView/cssip/govtint_testing/"
-output_folder = "full_testing/"
-
 #read in table
 temp_gi_assignee_type <- fread(file = str_c(input_folder, "temp_gi_assignee_type.csv"), header=TRUE, sep=",")
-temp_patent_level_gi <- read.csv(file = str_c(output_folder, "temp_patent_level_gi.csv"), header=TRUE, sep=",")
+temp_patent_level_gi <- read.csv(file = str_c(input_folder, "temp_patent_level_gi.csv"), header=TRUE, sep=",")
 patent_assignee <- fread(file = str_c(input_folder, "patent_assignee.tsv"), header=TRUE, sep="\t")
 assignee <- read.csv(file = str_c(input_folder, "assignee.tsv"), header=TRUE, sep="\t")
 rawassignee <- fread(file = str_c(input_folder, "rawassignee.tsv"), header=TRUE, sep="\t")

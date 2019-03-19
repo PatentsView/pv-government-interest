@@ -1,18 +1,13 @@
 This repository contains all necessary scripts to run and understand government interest patents.
 
-The code is divided into the following two folders:
-
-* **1_R_Data_Prep:** These scripts will help prepare data for analysis
-
-* **2_Data_Viz_Generate:** These scripts will generate various visualizations 
-
 There are two steps involved in running codefiles:
-1. Prep data tables
-2. Generate data visualizations
+**1.Data Preparation** - The scripts in the **1_R_Data_Prep:** folder will help prepare data for analysis.
+
+**2.Data Visualization** - The scripts in the **2_Data_Viz_Generate:** folder will generate visualizations.
 
 **Step 1: Data Preparation**
 
-	a. To gather data, download the most updated versions of the bulk download datafiles from http://www.patentsview.org/download/ and save it to a folder called 'data_to_read' in '2_Data_Viz_Generate'. 
+	a. To gather data, download the most updated versions of the bulk download datafiles (listed below) from http://www.patentsview.org/download/. Save these to a folder called 'data_to_read' under the '2_Data_Viz_Generate' folder. 
 		These are the bulk download datafiles you will need:
 			1. assignee
 			2. foreigncitation
@@ -23,7 +18,7 @@ There are two steps involved in running codefiles:
 			7. patent 
 			8. patent_assignee
 			9. patent_govintorg 
-			10.patent_inventor wipo_field
+			10.patent_inventor 
 			11.rawassignee
 			12. usapplicationcitation
 			13. uspatentcitation
@@ -32,9 +27,20 @@ There are two steps involved in running codefiles:
 
 	b. Go to the folder '1_R_Data_Prep'. There should be 7 scripts in this folder that will help prepare the data for visualization. Open these scripts in R/RStudio. 
 	
-	c. Make sure you change your working directory to match the folder path where you stored the bulk download files from part a above (Example folder path: *"yourpath/government-interest/2_Data_Viz_Generate/data_to_read"*). First run "assignees_looked_up_types.R" and then run through all of the R scripts in numerical order to generate tables. 
+	c. First look at requirements.R. Make sure you change the **input_folder** and **output_folder** variables to match the folderpaths where you stored the bulk download files from part a above (Example folder path: _"yourpath/government-interest/2_Data_Viz_Generate/data_to_read/"_). 
+
+	d. Run the script "assignees_looked_up_types.R" first. Then run through the remaining R scripts in numerical order. 
+
+		Note: Some of the scripts will take time to run since a few of the bulk download tables are large. Here are estimated running times:
+			* assignees_looked_up_types.R (~ 17 minutes)
+			* 0_intermediate_patcit.R (~ 1 hour, 15 minutes)
+			* 1_generate_citation_counts (~ 3-5 hours)
+			* 2_create_core_tables (~ 1 hour, 11 minutes)
+			* 3_create_assignee_table (~ 6 minutes)
+			* 4_inventor_gender (~ 3 minutes)
+			* 5_create_5yr_citation_1thru5 (~ 1 hour)
 	
-	d. Save all the tables generated from running the scripts in '1_R_Data_Prep' in the folder 'data_to_read' under the folder '2_Data_Viz_Generate'. These tables include the following:
+	e. All the temporary tables generated from running the scripts in '1_R_Data_Prep' will be saved to the output folder path you specified in the "data_to_read" folder under the "2_Data_Viz_Generate' folder. These tables include the following:
 		
 		Assignees_looked_up_types.R:
 			1. assignees_lookedup_types.csv
@@ -77,20 +83,18 @@ There are two steps involved in running codefiles:
 			5. temp_5yr_citations_by_cite_yr5
 
 
-	e. Go to this webpage: https://www.aaas.org/programs/r-d-budget-and-policy/historical-trends-federal-rd and download the Excel file for "Total R&D by Agency, 1976-2018" under the _By Agency_ section. 
+	f. *Additional files*: Go to the following webpage: https://www.aaas.org/programs/r-d-budget-and-policy/historical-trends-federal-rd. Download the Excel file for "Total R&D by Agency, 1976-2018" under the _By Agency_ section. 
 
-		1. Open this file in Excel and transpose the data table. To do this, copy the data table (only upto the "Total R&D" section (ignore the R&D: Defense and Nondefense section)) and use the paste special option _transpose the table_. Save the transposed table as "agencies.csv" in the same 'data_to_read' folder under the '2_Data_Viz_Generate' folder.
+		1. Open this file in Excel and transpose the data table. To do this, copy the data table (only upto the "Total R&D" section (ignore the R&D: Defense and Nondefense section)) and use the paste special option _transpose the table_. Save the transposed table as a csv file with the name "agencies.csv" in the same 'data_to_read' folder under the '2_Data_Viz_Generate' folder as all the temporary tables.
 
 
-**Step 3: Generate Data Visualizations**
+**Step 2: Data Visualizations**
 	
-	a. Go to the folder '2_Data_Viz_Generate'. There should be several scripts in this folder that will generate visualizations. Open these scripts in R/RStudio. Make sure you change your working directory to match this folder path (Example folder path: *"yourpath/government-interest/2_Data_Viz_Generate/"*)
+	a. Go to the folder '2_Data_Viz_Generate'. There should be several scripts in this folder that will generate visualizations. Open these scripts in R/RStudio. Make sure you change your working directory to match your current directory(Example folder path: *"yourpath/government-interest/2_Data_Viz_Generate/"*)
 
 	b. Run through the script "requirements.R". This will install and load all necessary libraries and fonts.
 
 	c. Next, run the script "govIntBrief.R". This will generate all other visualizations.
-
-		** NOTE: In this step, if you generated tables using R in Step 1, then make sure you change the way you read in the tables in this script. **
 
 		This script will generate two folders:
 		(1) Folder 'data_viz': a folder to store all of the viz that will be generated from running this R script

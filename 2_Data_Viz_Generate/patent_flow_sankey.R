@@ -24,7 +24,7 @@
   
   # sankey viz for funders --> assignees to do the network viz
   
-  assignees.merged.sub <- assignees.merged[,c(1, 3, 20)] # patent_id, entity, level_one
+  assignees.merged.sub <- assignees.merged[,c(1, 3, 23)] # patent_id, entity, level_one
   ass_org.merged.ratio <- assignees.merged.sub %>%  
     distinct() %>% 
     group_by(patent_id) %>% 

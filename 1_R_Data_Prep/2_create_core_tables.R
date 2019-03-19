@@ -1,9 +1,5 @@
 source("requirements.R")
 
-# input and output folder paths
-input_folder = "G:/PatentsView/cssip/govtint_testing/"
-output_folder = "full_testing/"
-
 #read in table
 patent_inventor <- fread(file = str_c(input_folder, "patent_inventor.tsv"), header=TRUE, sep="\t")
 patent_assignee <- fread(file = str_c(input_folder, "patent_assignee.tsv"), header=TRUE, sep="\t")
@@ -16,7 +12,7 @@ patent_govintorg <- fread(file = str_c(input_folder, "patent_govintorg.tsv"), he
 government_organization <- read.csv(file = str_c(input_folder, "government_organization.tsv"), header=TRUE, sep="\t")
 
 # patent counts and patent merged table
-patent_combined = fread(file=str_c(output_folder,"temp_patent_counts_patent_merged.csv"), header=TRUE, sep=",", verbose=TRUE)
+patent_combined = fread(file=str_c(input_folder,"temp_patent_counts_patent_merged.csv"), header=TRUE, sep=",", verbose=TRUE)
 
 ## Create the main Patent Level and Government Interest Level tables
 ## These tables have a lot of details around the patents including information from the database
@@ -30,7 +26,7 @@ c <- patent_inventor %>%
         count(inventor_id) %>% 
         rename(num_inventors = n) %>% 
         select(patent_id,inventor_id, num_inventors)
-fwrite(c, str_c(output_folder, "temp_patinv_grouped.csv"), sep = ",")
+
 rm(patent_inventor)
 
 d <- patent_assignee %>% 
@@ -38,7 +34,6 @@ d <- patent_assignee %>%
         count(assignee_id) %>% 
         rename(num_assignees = n) %>% 
         select(patent_id, num_assignees)
-fwrite(d, "temp_patassignee_grouped.csv", sep = ",")
 
 e <- c %>% left_join(d, by = "patent_id")
 
@@ -53,12 +48,11 @@ wf <- w %>%
           left_join(wipo_field, by = "id") %>% 
           rename(wipo_sector = sector_title, wipo_field = field_title)
 
-fwrite(wf, "full_testing/temp_wf_w_join.csv", sep = ",")
 
 p <- wf %>% 
-        left_join(patent_combined, by = "patent_id") %>% 
+        left_join(patent_combined, by.x = "patent_id", by.y = "id") %>% 
         select(patent_id, inventor_id, date, num_us_patents_cited, num_us_applications_cited, num_foreign_documents_cited, kind, type,
-               num_inventors, num_assignees, wipo_sector, wipo_field)
+               num_inventors, num_assignees, wipo_sector, wipo_field, year)
 
 n <- nber %>% 
       select(patent_id, category_id, subcategory_id) %>% 

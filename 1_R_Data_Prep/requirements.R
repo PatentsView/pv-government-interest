@@ -18,3 +18,9 @@ install_pkgs <- function(pkg) {
 pkg_list <- c("data.table", "dplyr","lubridate", "tidyr","stringr","purrr", "chunked")
 
 lapply(pkg_list, install_pkgs)
+
+
+########### Set folder paths here #############
+# input and output folder paths
+input_folder = ""
+output_folder = ""

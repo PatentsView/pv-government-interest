@@ -1,5 +1,8 @@
 source("requirements.R")
 
+input_folder = "G:/PatentsView/cssip/government-interest/2_Data_Viz_Generate/data_to_read/"
+output_folder = "G:/PatentsView/cssip/government-interest/2_Data_Viz_Generate/data_to_read/"
+
 academic = c()
 government= c()
 corporate = c()
@@ -9,7 +12,7 @@ cat = list(academic, government, corporate, hospital)
 names(cat) = c("Academic", "Government", "Corporate", "Hospital")
 
 # process first thesaurus
-acg_txt_con = file("AcadCorpGovIndiv.txt")
+acg_txt_con = file(str_c(input_folder, "AcadCorpGovIndiv.txt"))
 
 acg_text = readLines(acg_txt_con)
 category = NA
@@ -52,7 +55,7 @@ cat["Hospital"][[1]] = append(cat["Hospital"][[1]], add_hospital)
 
 
 # process second thesaurus
-new_thes = file("new_thesaurus.txt")
+new_thes = file(str_c(input_folder, "new_thesaurus.txt"))
 
 new_thes_text = readLines(new_thes)
 counter = 0
@@ -83,68 +86,56 @@ re_hosp = str_c(cat["Hospital"][[1]], collapse="|")
 re_corp = str_c(cat["Corporate"][[1]], collapse = "|")
 re_institute = "institute"
 
-#assignee_script = fread("F:/Govt_Int/2018_Update/2018_Update_gov_int/data_to_read/assignee_type.csv", sep = ",", verbose = TRUE, header= TRUE)
 
-
-rawassignee = fread("G:/PatentsView/cssip/govtint_testing/rawassignee.tsv", sep = "\t", verbose = TRUE, header= TRUE)
+rawassignee = fread(str_c(input_folder, "rawassignee.tsv"), sep = "\t", verbose = TRUE, header= TRUE)
 # keep only fields we need
 assignee = rawassignee %>% select(patent_id, type, organization)
  
-#check = assignee[1:15, "organization"]
+#rm(rawassignee)
 
-rm(rawassignee)
-
-assignee$thes_type = NA
+assignee$thes_types = NA
 
 idx_list = c(1:nrow(assignee))
 idx_to_run = c()
 
 # ~ 66,797: any Null organizations = Persons
 null_idx = which(grepl("NULL", assignee$organization))
-assignee$thes_type[null_idx] = "Person"
+assignee$thes_types[null_idx] = "Person"
 
 # acad ~ 211,604: set type of Academic orgs 
 acad_idx = which(grepl(re_acad, assignee$organization))
-assignee$thes_type[acad_idx] = "Academic"
+assignee$thes_types[acad_idx] = "Academic"
 
 # ~ 4,354,349: set type of Corp orgs
 corp_idx = which(grepl(re_corp, assignee$organization))
-assignee$thes_type[corp_idx] = "Corporate"
+assignee$thes_types[corp_idx] = "Corporate"
 
 # set type of corporation institutes
-corp_institute_idx = intersect(c(which(grepl(re_institute, assignee$organization[idx_to_run]))), acad_idx) %>% intersect(corp_idx)
-assignee$thes_type[corp_institute_idx] = "Corporate"
+corp_institute_idx = intersect(c(which(grepl(re_institute, assignee$organization))), acad_idx) %>% intersect(corp_idx)
+assignee$thes_types[corp_institute_idx] = "Corporate"
 
 
 # gov ~ 47,428: set type of Gov orgs
 gov_idx = which(grepl(re_gov, assignee$organization))
-assignee$thes_type[gov_idx] = "Government"
+assignee$thes_types[gov_idx] = "Government"
 
 # ~ 2300: set type of Hospital orgs
 hosp_idx = which(grepl(re_hosp, assignee$organization))
-assignee$thes_type[hosp_idx] = "Hospital"
+assignee$thes_types[hosp_idx] = "Hospital"
 
 # set type of orgs not falling into other categories - ambiguous
 idx_to_run = setdiff(idx_to_run, hosp_idx)
-ambig_idx = which(is.na(assignee$thes_type))
-assignee$thes_type[ambig_idx] = "Ambiguous"
-
-# assignee_prev = fread("G:/PatentsView/cssip/govtint_testing/assignees_lookedup_types_prev.csv", sep=",")
-# assignee_prev = assignee_prev %>% select(patent_id, type, organization, thes_types)
-# assignee_match_idx = match(assignee_prev$patent_id, assignee$patent_id)
-# check = assignee[assignee_match_idx]
-# assignee_prev = assignee_prev %>% arrange(organization)
-# check = check %>% arrange(organization)
-# all.equal(assignee_prev, check)
+ambig_idx = which(is.na(assignee$thes_types))
+assignee$thes_types[ambig_idx] = "Ambiguous"
 
 
-fwrite(assignee, "assignees_lookedup_types_r_v3_testing.csv", sep = ",")
+fwrite(assignee, str_c(output_folder, "assignees_lookedup_types.csv"), sep = ",")
 
 # temp_gi_assignee_type.csv generation for script 3
 ############################################################################
 ##  Government Interest Patents
 ############################################################################
-patent_govintorg <- fread(file = "G:/PatentsView/cssip/govtint_testing/patent_govintorg.tsv", header=TRUE, sep="\t")
+patent_govintorg <- fread(file = str_c(input_folder, "patent_govintorg.tsv"), header=TRUE, sep="\t")
 
 ## table of just GI patents
 ## each row is a patent and each patent appears only once
@@ -153,7 +144,7 @@ govint_distinct_id <- patent_govintorg %>% distinct(patent_id)
 temp_gi_assignee_type <- assignee %>% 
   filter(patent_id %in% govint_distinct_id$patent_id)
 
-fwrite(temp_gi_assignee_type, "G:/PatentsView/cssip/govtint_testing/temp_gi_assignee_type.csv", sep = ",")
+fwrite(temp_gi_assignee_type, str_c(output_folder, "temp_gi_assignee_type.csv"), sep = ",")
 
 
 

@@ -1,15 +1,9 @@
 source("requirements.R")
 
-# input and output folder paths
-input_folder = "G:/PatentsView/cssip/govtint_testing/"
-output_folder = "full_testing/"
-
-
 # read in table
 temp_inventor_gender <- fread(file = str_c(input_folder, "inventor_gender.tsv"), header=TRUE, sep="\t")
 temp_patent_level_gi <- read.csv(file = str_c(output_folder, "temp_patent_level_gi.csv"), header=TRUE, sep=",")
 patent_inventor <- fread(file = str_c(input_folder, "patent_inventor.tsv"), header=TRUE, sep="\t")
-#temp_govt_associated_inventors_clean <- read.csv(file = "temp_govt_associated_inventors_clean.csv", header=TRUE, sep=",")
 
 ## Inventor gender data 
 ## the tables you want are temp_gi_inventor_gender (which has gender and wipo sector etc)
