@@ -8,7 +8,7 @@ _2. Data Visualization_ - The scripts in the **2_Data_Viz_Generate** folder will
 
 **Step 1: Data Preparation**
 
-a. Download the bulk download data files from http://www.patentsview.org/download/. 
+	a. Download the bulk download data files from http://www.patentsview.org/download/. 
 	These are the bulk download data files you will need:
 		1. assignee
 		2. foreigncitation
@@ -28,11 +28,11 @@ a. Download the bulk download data files from http://www.patentsview.org/downloa
 
 		Save these in the 'data_to_read' folder under the '2_Data_Viz_Generate' folder. 
 
-b. Go to the folder '1_R_Data_Prep'. Open the scripts from this folder in R/RStudio. 
+	b. Go to the folder '1_R_Data_Prep'. Open the scripts from this folder in R/RStudio. 
 	
-c. First look at requirements.R. Make sure you change the **input_folder** and **output_folder** variables to match the folder paths where you stored the bulk download files from part a above (Example folder path: "<Your-Path-Here>/government-interest/2_Data_Viz_Generate/data_to_read/"). 
+	c. First look at requirements.R. Make sure you change the **input_folder** and **output_folder** variables to match the folder paths where you stored the bulk download files from part a above (Example folder path: "<Your-Path-Here>/government-interest/2_Data_Viz_Generate/data_to_read/"). 
 
-d. Run the script "assignees_looked_up_types.R" first. Then run through the remaining R scripts in numerical order. When running scripts, make sure your working directory matches your current directory (Example folder path: *"<Your-Path-Here>/government-interest/1_R_Data_Prep/"*)
+	d. Run the script "assignees_looked_up_types.R" first. Then run through the remaining R scripts in numerical order. When running scripts, make sure your working directory matches your current directory (Example folder path: *"<Your-Path-Here>/government-interest/1_R_Data_Prep/"*)
 
 	Note: Some of the scripts will take time to run since several bulk download tables are large. 
 	Here are estimated running times:
@@ -44,7 +44,7 @@ d. Run the script "assignees_looked_up_types.R" first. Then run through the rema
 		* 4_inventor_gender (~ 3 minutes)
 		* 5_create_5yr_citation_1thru5 (~ 1 hour)
 	
-e. All the temporary tables generated from running the scripts in '1_R_Data_Prep' will be saved to the output folder path you specified ("2_Data_Viz_Generate/data_to_read/" folder).
+	e. All the temporary tables generated from running the scripts in '1_R_Data_Prep' will be saved to the output folder path you specified ("2_Data_Viz_Generate/data_to_read/" folder).
 	These tables include the following:
 		
 		Assignees_looked_up_types.R:
@@ -87,7 +87,7 @@ e. All the temporary tables generated from running the scripts in '1_R_Data_Prep
 			5. temp_5yr_citations_by_cite_yr5
 
 
-f. Additional files: 
+	f. Additional files: 
 	
 	1. Go to the following webpage: https://www.aaas.org/programs/r-d-budget-and-policy/historical-trends-federal-rd.
 	Download the Excel file for "Total R&D by Agency, 1976-2018" under the _By Agency_ section. 
@@ -98,15 +98,15 @@ f. Additional files:
 
 **Step 2: Data Visualizations**
 	
-a. Go to the folder '2_Data_Viz_Generate'. Open the scripts from this folder in R/RStudio. Make sure you change your working directory to match your current directory (Example folder path: *"<Your-Path-Here>/government-interest/2_Data_Viz_Generate/"*)
+	a. Go to the folder '2_Data_Viz_Generate'. Open the scripts from this folder in R/RStudio. Make sure you change your working directory to match your current directory (Example folder path: *"<Your-Path-Here>/government-interest/2_Data_Viz_Generate/"*)
 
-b. Run through the script "requirements.R".
+	b. Run through the script "requirements.R".
 
 	Note: To use extrafonts in R, you will need to install ghostscript. Follow the instructions here: https://www.ghostscript.com/doc/current/Install.htm in order to install ghostscript. Then, change the Sys.setenv(__R_GSCMD__ = "") line in "requirements.R" to the path that matches where the Ghostscript executable is on your computer.
 
 	Note: To save the sankey visualization, you will need to install orca. If you run into errors, follow the instructions at: https://github.com/plotly/orca#installation to install orca. Then, change the Sys.setenv(__ORCA_CMD__ = "") line in "requirements.R" to the path that matches where the orca executable is on your computer.
 
-c. Next, run the script "govIntBrief.R". This will generate all visualizations and runs for ~ 41 minutes.
+	c. Next, run the script "govIntBrief.R". This will generate all visualizations and runs for ~ 41 minutes.
 
 	This script will generate two folders:
 	(1) Folder **'data_viz/'**: a folder to store all of the viz that will be generated from running this R script
