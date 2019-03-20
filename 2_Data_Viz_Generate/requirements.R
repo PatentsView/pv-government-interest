@@ -30,6 +30,10 @@ if(nrow(fonttable()) == 0){
   loadfonts(device = "pdf")
 }
 
+# Needed only on Windows - run once per R session
+# Adjust the path to match your installation of Ghostscript
+Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.25/bin/gswin64c.exe")
+Sys.setenv(ORCA_CMD = "C:/Program Files/Anaconda2/orca_app/orca.exe")
 
 # set color scheme
 cyan <- rgb (0, 123, 188,	maxColorValue = 255)

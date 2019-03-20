@@ -5,22 +5,6 @@
 
 script_v <- "3.0"
 #########################################################################################################
-# in.patent_level <- fread("full_testing/temp_patent_level_gi.csv", header = TRUE, stringsAsFactors = FALSE, sep=",")
-# in.gov_level <- read.csv("full_testing/temp_gi_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
-# in.all <- fread("full_testing/temp_patent_level_all.csv", header = TRUE, stringsAsFactors = FALSE, sep = ",")
-# in.assignees.all <- fread("full_testing/all_assignees.csv", header = TRUE, stringsAsFactors = FALSE, sep = ",")
-# in.cite_1 <- read.csv("full_testing/temp_5yr_citations_yr1.csv", header = TRUE, stringsAsFactors = FALSE)
-# in.cite_2 <- read.csv("full_testing/temp_5yr_citations_yr2.csv", header = TRUE, stringsAsFactors = FALSE)
-# in.cite_3 <- read.csv("full_testing/temp_5yr_citations_yr3.csv", header = TRUE, stringsAsFactors = FALSE)
-# in.cite_4 <- read.csv("full_testing/temp_5yr_citations_yr4.csv", header = TRUE, stringsAsFactors = FALSE)
-# in.cite_5 <- read.csv("full_testing/temp_5yr_citations_yr5.csv", header = TRUE, stringsAsFactors = FALSE)
-# 
-# 
-# ### read in tables from local file(not exist in db)
-# in.sector <- fread("assignee_types_files/assignees_lookedup_types.csv", header = TRUE, stringsAsFactors = FALSE, sep=",", verbose=TRUE)
-# in.fund <- read.csv("agencies.csv", header = TRUE, stringsAsFactors = FALSE)
-# in.size <- read.csv("government_interest_patents_1980-2018_returned.csv", header = TRUE, stringsAsFactors = FALSE)
-
 in.patent_level <- read.csv("data_to_read/temp_patent_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
 in.gov_level <- read.csv("data_to_read/temp_gi_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
 in.all <- read.csv("data_to_read/temp_patent_level_all.csv", header = TRUE, stringsAsFactors = FALSE)
@@ -100,10 +84,10 @@ dev.off()
 
 
 source("patent_flow_sankey.R")
+#Sys.setenv('MAPBOX_TOKEN' = "")
+orca(patent_flow_plot, file = paste0("data_viz/Sankey_", script_v, ".pdf"))
 
-CairoPDF(file = paste0("data_viz/SankeyPlot_", script_v), width = 9, height = 7)
-patent_flow_plot
-dev.off()
+
 
 source("citation_analysis.R")
 citation_plot
@@ -118,10 +102,10 @@ dev.off()
 # merge sector type for assignees and create dodged bar chart
 in.sector$organization <- trimws(in.sector$organization)
 sector_org.merged <- in.patent_level.merged %>% 
-  select(patent_id, level_one, wipo_field) %>% 
+  select(patent_id, level_one, wipo_field, year) %>% 
   distinct() %>% # just patent_id, level_one org
   inner_join(in.sector, by="patent_id") %>% 
-  select(patent_id, level_one, type, organization, thes_types, wipo_field)
+  select(patent_id, level_one, type, organization, thes_types, wipo_field, year)
 
 # add a column weight = 1 / number of patent_id
 sector_org.merged.ratio <- sector_org.merged %>% 
@@ -142,9 +126,7 @@ level_one.clnd <- in.gov_level %>%
   mutate(weight = 1/n())
 
 sector_org_field.by_year.merged <- merge(sector_org.merged.ratio.clnd, in.patent_level, by="patent_id")
-colnames (sector_org_field.by_year.merged)
-head(sector_org_field.by_year.merged)
-sector_org_field.by_year.small <- sector_org_field.by_year.merged[c(1,2,5, 6,10,23)] %>% rename(wipo_field = wipo_field.x)
+sector_org_field.by_year.small <- sector_org_field.by_year.merged[c(1,2,5, 6,7,10,23)] %>% rename(wipo_field = wipo_field.x, year = year.x)
 sector_org_field.by_year.ratio <- sector_org_field.by_year.small %>% 
   group_by(patent_id) %>% 
   mutate(weight = 1/n())

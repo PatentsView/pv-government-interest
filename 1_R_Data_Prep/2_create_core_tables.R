@@ -5,9 +5,9 @@ patent_inventor <- fread(file = str_c(input_folder, "patent_inventor.tsv"), head
 patent_assignee <- fread(file = str_c(input_folder, "patent_assignee.tsv"), header=TRUE, sep="\t")
 nber <- fread(file = str_c(input_folder,"nber.tsv"), header=TRUE, sep="\t")
 wipo <- fread(file = str_c(input_folder,"wipo.tsv"), header=TRUE, sep="\t")
-wipo_field <- read.csv(file = str_c(input_folder,"wipo_field.tsv"), header=TRUE, sep="\t")
+wipo_field <- read.csv(file = str_c(input_folder,"wipo_field.tsv"), header=TRUE, sep="\t") 
 
-temp_5yr_citations <- fread(file = str_c(input_folder, "temp_5yr_citations_all_subset.csv"), sep=",")
+temp_5yr_citations <- fread(file = str_c(input_folder, "temp_5yr_citations_all.csv"), sep=",")
 patent_govintorg <- fread(file = str_c(input_folder, "patent_govintorg.tsv"), header=TRUE, sep="\t")
 government_organization <- read.csv(file = str_c(input_folder, "government_organization.tsv"), header=TRUE, sep="\t")
 
@@ -23,7 +23,7 @@ patent_combined = fread(file=str_c(input_folder,"temp_patent_counts_patent_merge
 ############################################################################
 c <- patent_inventor %>% 
         group_by(patent_id) %>% 
-        count(inventor_id) %>% 
+        dplyr::count(inventor_id) %>% 
         rename(num_inventors = n) %>% 
         select(patent_id,inventor_id, num_inventors)
 
@@ -31,7 +31,7 @@ rm(patent_inventor)
 
 d <- patent_assignee %>% 
         group_by(patent_id) %>% 
-        count(assignee_id) %>% 
+        dplyr::count(assignee_id) %>% 
         rename(num_assignees = n) %>% 
         select(patent_id, num_assignees)
 
@@ -42,7 +42,6 @@ w <- wipo %>%
       right_join(e, by = "patent_id") %>% 
       rename(id = field_id)
 
-wipo_field$id = wipo_field$id %>% as.character()
 
 wf <- w %>% 
           left_join(wipo_field, by = "id") %>% 
@@ -50,7 +49,7 @@ wf <- w %>%
 
 
 p <- wf %>% 
-        left_join(patent_combined, by.x = "patent_id", by.y = "id") %>% 
+        left_join(patent_combined, by = c("patent_id" ="id")) %>% 
         select(patent_id, inventor_id, date, num_us_patents_cited, num_us_applications_cited, num_foreign_documents_cited, kind, type,
                num_inventors, num_assignees, wipo_sector, wipo_field, year)
 
