@@ -3,7 +3,7 @@
 # Effects: Installs package 
 install_pkgs <- function(pkg) { 
   
-  # Install package if it isn't already
+  # Install package if it isn't alreadya
   if (!(pkg %in% installed.packages()[, "Package"])){ 
     
     install.packages(pkg, repos='http://cran.us.r-project.org')

@@ -1,7 +1,7 @@
 source("requirements.R")
 
-input_folder = "G:/PatentsView/cssip/government-interest/2_Data_Viz_Generate/data_to_read/"
-output_folder = "G:/PatentsView/cssip/government-interest/2_Data_Viz_Generate/data_to_read/"
+input_folder = ""
+output_folder = ""
 
 academic = c()
 government= c()
@@ -103,7 +103,7 @@ null_idx = which(grepl("NULL", assignee$organization))
 assignee$thes_types[null_idx] = "Person"
 
 # acad ~ 211,604: set type of Academic orgs 
-acad_idx = which(grepl(re_acad, assignee$organization))
+acad_idx = which(grepl(regex(re_acad), assignee$organization))
 assignee$thes_types[acad_idx] = "Academic"
 
 # ~ 4,354,349: set type of Corp orgs
@@ -124,7 +124,6 @@ hosp_idx = which(grepl(re_hosp, assignee$organization))
 assignee$thes_types[hosp_idx] = "Hospital"
 
 # set type of orgs not falling into other categories - ambiguous
-idx_to_run = setdiff(idx_to_run, hosp_idx)
 ambig_idx = which(is.na(assignee$thes_types))
 assignee$thes_types[ambig_idx] = "Ambiguous"
 

@@ -42,6 +42,15 @@
   count.ass_org.srtd <- count.ass_org.srtd[!grepl("The United States of America as Represented by the Administrator of the National Aeronautics and Space Administration", count.ass_org.srtd$entity), ]
   count.ass_org.srtd <- count.ass_org.srtd[!grepl("The United States of America as Represented by the Secretary of the Navy", count.ass_org.srtd$entity), ]
   
+  # Added
+  count.ass_org.srtd <- count.ass_org.srtd[!grepl("The United States of America as Represented by the Secretary of the Air Force", count.ass_org.srtd$entity), ]
+  count.ass_org.srtd <- count.ass_org.srtd[!grepl("The United States of America as Represented by the Secretary of the Army", count.ass_org.srtd$entity), ]
+  count.ass_org.srtd <- count.ass_org.srtd[!grepl("United States Government", count.ass_org.srtd$entity), ]
+  count.ass_org.srtd <- count.ass_org.srtd[!grepl("The United States of America as Represented by the United States of Department of Energy"  , count.ass_org.srtd$entity), ]
+  count.ass_org.srtd <- count.ass_org.srtd[!grepl("The United States of America as Represented by the Administrator of the National Aeronautics & Space Administration"  , count.ass_org.srtd$entity), ]
+  
+  
+  
   # create nodes
   top.rows <- nrow(count.ass_org.srtd)
   top.funders <- unique(count.ass_org.srtd[1:top.rows,2])

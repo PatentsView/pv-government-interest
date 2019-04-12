@@ -7,8 +7,8 @@ script_v <- "3.0"
 #########################################################################################################
 in.patent_level <- read.csv("data_to_read/temp_patent_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
 in.gov_level <- read.csv("data_to_read/temp_gi_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
-in.all <- read.csv("data_to_read/temp_patent_level_all.csv", header = TRUE, stringsAsFactors = FALSE)
-in.assignees.all <- read.csv("data_to_read/all_assignees.csv", header = TRUE, stringsAsFactors = FALSE)
+in.all <- fread("data_to_read/temp_patent_level_all.csv", verbose = TRUE)
+in.assignees.all <- fread("data_to_read/all_assignees.csv", verbose=TRUE)
 in.cite_1 <- read.csv("data_to_read/temp_5yr_citations_yr1.csv", header = TRUE, stringsAsFactors = FALSE)
 in.cite_2 <- read.csv("data_to_read/temp_5yr_citations_yr2.csv", header = TRUE, stringsAsFactors = FALSE)
 in.cite_3 <- read.csv("data_to_read/temp_5yr_citations_yr3.csv", header = TRUE, stringsAsFactors = FALSE)
@@ -42,14 +42,14 @@ in.patent_level.merged <- merge(in.patent_level, in.gov_level, by="patent_id")
 source("top6_technology_fields.R")
 # top6_plot save as a pdf
 top6_plot
-CairoPDF(file= paste0("data_viz/longWipoFields_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/4.12.19_longWipoFields_v", script_v),  width = 9, height = 7)
 top6_plot
 dev.off()
 
 # share_gi_total_plot save as pdf
 share_gi_total_plot 
 
-CairoPDF(file= paste0("data_viz/longWipoFieldsPercent_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/4.12.19_longWipoFieldsPercent_v", script_v),  width = 9, height = 7)
 share_gi_total_plot 
 dev.off()
 
@@ -57,42 +57,42 @@ source("other_figures.R")
 #index_plot save as pdf
 index_plot
 
-CairoPDF(file= paste0("data_viz/indexed_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/4.12.19_indexed_v", script_v),  width = 9, height = 7)
 index_plot
 dev.off()
 
 # mean_num_inv_plot save as pdf 
 mean_num_inv_plot
 
-CairoPDF(file= paste0("data_viz/longInventor_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/4.12.19_longInventor_v", script_v),  width = 9, height = 7)
 mean_num_inv_plot
 dev.off()
 
 # funding_agencies_plot save as pdf
 funding_agencies_plot
 
-CairoPDF(file= paste0("data_viz/funders-assignees.dodged_v", script_v), width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/4.12.19_funders-assignees.dodged_v", script_v), width = 9, height = 7)
 funding_agencies_plot
 dev.off()
 
 # firm_size_plot save as pdf 
 firm_size_plot
 
-CairoPDF(file = paste0("data_viz/firmSize_", script_v), width = 9, height = 7)
+CairoPDF(file = paste0("data_viz/4.12.19_firmSize_", script_v), width = 9, height = 7)
 firm_size_plot
 dev.off()
 
 
 source("patent_flow_sankey.R")
 #Sys.setenv('MAPBOX_TOKEN' = "")
-orca(patent_flow_plot, file = paste0("data_viz/Sankey_", script_v, ".pdf"))
+orca(patent_flow_plot, file = paste0("data_viz/4.12.19_Sankey_", script_v, ".pdf"))
 
 
 
 source("citation_analysis.R")
 citation_plot
 # save citation_plot as pdf
-CairoPDF(file = paste0("data_viz/fiveYearCitationImpact_", script_v), width = 9, height = 7)
+CairoPDF(file = paste0("data_viz/4.12.19_fiveYearCitationImpact_", script_v), width = 9, height = 7)
 citation_plot
 dev.off() 
 
