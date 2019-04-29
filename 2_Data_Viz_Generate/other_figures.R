@@ -81,11 +81,11 @@
   colnames(patent_level.bkp)
   nrow(patent_level.bkp)
   patent_level.bkp$year <- as.numeric(as.character(patent_level.bkp$year))
-  gi.agg <- aggregate(patent_level.bkp[,c(2,3)], list(Year = patent_level.bkp$year), na.rm=TRUE, mean)
+  gi.agg <- aggregate(patent_level.bkp[,c("num_inventors","num_assignees")], list(Year = patent_level.bkp$year), na.rm=TRUE, mean)
   
   all.bkp <- in.all 
   all.bkp$year <- as.numeric(as.character(all.bkp$year))
-  all.agg <- aggregate(all.bkp[,c(2,3)], list(Year = all.bkp$year), na.rm=TRUE, mean)
+  all.agg <- aggregate(all.bkp[,c("num_inventors","num_assignees")], list(Year = all.bkp$year), na.rm=TRUE, mean)
   
   merged.agg <- gi.agg %>% inner_join(all.agg, by="Year", suffixes=c("_gi", "_all"))
   melt.agg <- melt(merged.agg, id="Year", measure.vars = c(2,4)) # was c(2:5)

@@ -47,18 +47,18 @@ read_csv_chunkwise(str_c(input_folder,"uspatentcitation.tsv"), chunk_size=500000
   write_csv_chunkwise(str_c(output_folder, "temp_5yr_citations_by_cite.csv"))
 
 
+
 temp_5yr_citations_by_cite_all = fread(str_c(input_folder, "temp_5yr_citations_by_cite.csv"), sep = ",",na.strings=getOption("datatable.na.strings","NA"), verbose=TRUE)
 
 ## derivative table with 5 year citation counts and weighted citation counts
 temp_5yr_citations_all_1 <- temp_5yr_citations_by_cite_all %>% 
                               group_by(citation_id) %>% 
-                              summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents))
+                              summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm=TRUE))
 
 temp_5yr_citations_all_2 <- temp_5yr_citations_by_cite_all %>% 
                               group_by(citation_id) %>%
-                              count(patent_id) %>% 
-                              rename(num_citations_in_5yrs = n) %>%
-                              select(citation_id, num_citations_in_5yrs)
+                              summarise(num_citations_in_5yrs = n()) 
+                             
 
 temp_5yr_citations_all <- temp_5yr_citations_all_1 %>% 
                             inner_join(temp_5yr_citations_all_2, by = "citation_id")
@@ -80,13 +80,11 @@ fwrite(temp_5yr_citations_by_cite, file = str_c(output_folder, "temp_5yr_citatio
 ## derivative table with 5 year citation counts and weighted citation count
 temp_5yr_citations_1 <- temp_5yr_citations_by_cite %>% 
                               group_by(citation_id) %>% 
-                              summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents))
+                              summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm = TRUE))
 
 temp_5yr_citations_2 <- temp_5yr_citations_by_cite %>% 
                               group_by(citation_id) %>%
-                              count(patent_id) %>% 
-                              rename(num_citations_in_5yrs = n) %>%
-                              select(citation_id, num_citations_in_5yrs)
+                             summarise(num_citations_in_5yrs = n())
 
 temp_5yr_citations <- temp_5yr_citations_1 %>% 
                               inner_join(temp_5yr_citations_2, by = "citation_id")

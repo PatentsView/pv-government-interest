@@ -1,5 +1,6 @@
 source("requirements.R")
 
+
 #read in table
 patent_inventor <- fread(file = str_c(input_folder, "patent_inventor.tsv"), header=TRUE, sep="\t")
 patent_assignee <- fread(file = str_c(input_folder, "patent_assignee.tsv"), header=TRUE, sep="\t")
@@ -23,17 +24,13 @@ patent_combined = fread(file=str_c(input_folder,"temp_patent_counts_patent_merge
 ############################################################################
 c <- patent_inventor %>% 
         group_by(patent_id) %>% 
-        dplyr::count(inventor_id) %>% 
-        rename(num_inventors = n) %>% 
-        select(patent_id,inventor_id, num_inventors)
+        summarise(num_inventors = n())
 
-rm(patent_inventor)
+#rm(patent_inventor)
 
-d <- patent_assignee %>% 
+d <- patent_assignee %>%
         group_by(patent_id) %>% 
-        dplyr::count(assignee_id) %>% 
-        rename(num_assignees = n) %>% 
-        select(patent_id, num_assignees)
+        summarise(num_assignees = n())
 
 e <- c %>% left_join(d, by = "patent_id")
 
@@ -50,7 +47,7 @@ wf <- w %>%
 
 p <- wf %>% 
         left_join(patent_combined, by = c("patent_id" ="id")) %>% 
-        select(patent_id, inventor_id, date, num_us_patents_cited, num_us_applications_cited, num_foreign_documents_cited, kind, type,
+        select(patent_id, date, num_us_patents_cited, num_us_applications_cited, num_foreign_documents_cited, kind, type,
                num_inventors, num_assignees, wipo_sector, wipo_field, year)
 
 n <- nber %>% 
