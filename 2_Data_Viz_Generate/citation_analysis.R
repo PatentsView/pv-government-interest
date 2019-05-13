@@ -67,8 +67,10 @@ level_one.clnd <- in.gov_level %>%
   sector_merge$Third <- sector_merge$num_citation_yr3 * sector_merge$weight
   sector_merge$Fourth <- sector_merge$num_citation_yr4 * sector_merge$weight
   sector_merge$Fifth <- sector_merge$num_citation * sector_merge$weight
-  sector_merge.sub <- sector_merge[,c(26:32)]
-  # 23:30---27:32
+  cols_to_keep = c("thes_types", "weight", "First", "Second",
+                   "Third","Fourth","Fifth")
+  sector_merge.sub <- sector_merge[,cols_to_keep]
+  
   sector_merge.sub[is.na(sector_merge.sub)] <- 0
   cit_sector.count <- aggregate(cbind (weight, First, Second, Third, Fourth, Fifth)
                                 ~
@@ -85,9 +87,6 @@ level_one.clnd <- in.gov_level %>%
   cit_sector.count.melt <- melt(cit_sector.count.clnd, id="thes_types", measure.vars = c(3:7))
   cit_sector.count.melt.clnd <- cit_sector.count.melt %>% filter(thes_types != "Other")
 
-
-  
-  
   citation_plot <- ggplot(cit_sector.count.melt.clnd, aes(x=variable,y=value,fill=thes_types)) +
     geom_bar(stat="identity", position = "dodge") + 
     labs(y= "Average Accrued Weighted Citations", x="Year After Publication") +

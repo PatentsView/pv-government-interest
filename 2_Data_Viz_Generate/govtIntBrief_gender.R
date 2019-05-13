@@ -1,12 +1,12 @@
 source("requirements.R")
-script_v <- "3.0"
+script_v <- "1.0"
 
 #########################################################################################################
 
 #read in helper data
 in.patent_level <- read.csv(str_c(input_folder, "temp_patent_level_gi.csv"))
 
-temp <- in.patent_level %>% 
+in.patent_level <- in.patent_level %>% 
   filter(year != "NULL" &  year >= 1980 & year <= 2018) 
 
 #load inventor gender
@@ -60,8 +60,9 @@ graph1 <- ggplot(for_graph) +
         text=element_text(size=16,  family="Cambria")
   )
 graph1
-ggsave (paste0("data_viz\\gi_teams_with_female_inventors_over_time.png"), device = "png")
-write.csv(for_graph, file="out\\teams_with_at_least_one_woman.csv")
+ggsave (paste0("data_viz/gi_teams_with_female_inventors_over_time.png"), device = "png")
+CairoPDF(file= paste0("data_viz/gi_teams_with_female_inventors_over_time_cairo", script_v),  width = 9, height = 7)
+write.csv(for_graph, file="out/teams_with_at_least_one_woman.csv")
 
 ##################################################
 # percent of teams with at least one woman by team size **
@@ -69,7 +70,7 @@ write.csv(for_graph, file="out\\teams_with_at_least_one_woman.csv")
 # average women's share of the inventor team (mean proportion of the team that is female for each team size) 
 # and size the markers based on the number of patents. Make sense?
 
-in.gender_wipo <- read.csv(str_c(input_folder,"temp_gi_inventor_gender.csv"))
+in.gender_wipo <- fread(str_c(input_folder,"temp_gi_inventor_gender.csv"))
 in.gender_wipo$year = in.gender_wipo$date %>% as.character() %>% ymd() %>% year()
 in.gender_wipo.sub <- in.gender_wipo %>% 
   filter(year >= 1980 & year <= 2018) %>% 
@@ -79,13 +80,13 @@ in.gender_wipo.sub$male <- as.numeric(in.gender_wipo.sub$male)
 
 women_in_teams <- in.gender_wipo.sub %>% 
   group_by(patent_id, num_inventors) %>% 
-  summarize(num_men = sum(male)) %>% 
+  mutate(num_men = sum(male)) %>% 
   mutate(percentWomen = (1 - num_men/num_inventors))
 
 grouped_by.num_inventors <- women_in_teams %>% 
   filter(percentWomen > 0) %>% 
   group_by(num_inventors) %>% 
-  summarise(meanPercWomenOnTeam = mean(percentWomen), 
+  dplyr::summarise(meanPercWomenOnTeam = mean(percentWomen), 
             numPatents = length(patent_id))  
 
 for_graph.num_inventors <- grouped_by.num_inventors %>% 
@@ -112,5 +113,6 @@ graph3 <- ggplot(data=for_graph.num_inventors, aes(x=num_inventors, y=meanPercWo
     legend.background = element_blank()
   ) 
 graph3
-ggsave (paste0("data_viz\\percent_with_female_inventor_by_team_size.png"), device = "png")
-write.csv(for_graph.num_inventors, "out\\mean_percent_of_teams_with_a_female_inventor.csv")
+ggsave (paste0("data_viz/percent_with_female_inventor_by_team_size.png"), device = "png")
+CairoPDF(file= paste0("data_viz/percent_with_female_inventor_by_team_size_cairo", script_v),  width = 9, height = 7)
+write.csv(for_graph.num_inventors, "out/mean_percent_of_teams_with_a_female_inventor.csv")

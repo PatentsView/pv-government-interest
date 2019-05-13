@@ -6,9 +6,19 @@ uspatentcitation <- fread(file = str_c(input_folder,"uspatentcitation.tsv"), hea
 government_interest <- read.csv(file = str_c(input_folder, "government_interest.tsv"), header=TRUE, sep="\t")
 
 # patent counts and patent merged table
-patent = fread(file=str_c(input_folder,"temp_patent_counts_patent_merged.csv"), header=TRUE, sep=",", verbose=TRUE)
+patent = fread(file=str_c(input_folder,"temp_patent_merged.csv"), header=TRUE, sep=",", verbose=TRUE)
 
 patent = patent %>% rename(patent_id = id)
+
+uspatentcitation <- fread(file = str_c(govint_test,"uspatentcitation.tsv"), header=TRUE, sep="\t", quote = "")
+government_interest <- read.csv(file = str_c(govint_test, "government_interest.tsv"), header=TRUE, sep="\t")
+# patent counts and patent merged table
+patent = fread(file=str_c(output_folder,"temp_patent_merged.csv"), header=TRUE, sep=",", verbose=TRUE)
+
+patent = patent %>% rename(patent_id = id)
+
+
+
 
 ## table with each government interest patent and any citations within 5 years -- for each year 1 thru 5 (changed by ska)
 ## patent_20180528.temp_updated_gi is the table with all the government interest and government assignee patents
@@ -37,12 +47,12 @@ temp_5yr_citations_by_cite_yr5 <- c %>%
 
 temp_5yr_citations_yr5_1 <- temp_5yr_citations_by_cite_yr5 %>% 
                            group_by(citation_id) %>% 
-                          summarize(num_citations_5 = n()) %>%
+                          dplyr::summarize(num_citations_5 = n()) %>%
                            rename(patent_id = citation_id)
 
 temp_5yr_citations_yr5_2 <- temp_5yr_citations_by_cite_yr5 %>% 
                                 group_by(citation_id) %>% 
-                                summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm = TRUE)) %>% 
+                                dplyr::summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm = TRUE)) %>% 
                                 rename(patent_id = citation_id)
 
 temp_5yr_citations_yr5 <- temp_5yr_citations_yr5_1 %>% 
@@ -57,12 +67,12 @@ temp_5yr_citations_by_cite_yr4 <- c %>%
 
 temp_5yr_citations_yr4_1 <- temp_5yr_citations_by_cite_yr4 %>% 
   group_by(citation_id) %>% 
-  summarize(num_citations_4 = n()) %>%
+  dplyr::summarize(num_citations_4 = n()) %>%
   rename(patent_id = citation_id)
 
 temp_5yr_citations_yr4_2 <- temp_5yr_citations_by_cite_yr4 %>% 
   group_by(citation_id) %>% 
-  summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm = TRUE)) %>% 
+  dplyr::summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm = TRUE)) %>% 
   rename(patent_id = citation_id)
 
 temp_5yr_citations_yr4 <- temp_5yr_citations_yr4_1 %>% 
@@ -77,12 +87,12 @@ temp_5yr_citations_by_cite_yr3 <- c %>%
 
 temp_5yr_citations_yr3_1 <- temp_5yr_citations_by_cite_yr3 %>% 
   group_by(citation_id) %>% 
-  summarize(num_citations_3 = n()) %>% 
+  dplyr::summarize(num_citations_3 = n()) %>% 
   rename(patent_id = citation_id)
 
 temp_5yr_citations_yr3_2 <- temp_5yr_citations_by_cite_yr3 %>% 
   group_by(citation_id) %>% 
-  summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm = TRUE)) %>% 
+  dplyr::summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm = TRUE)) %>% 
   rename(patent_id = citation_id)
 
 temp_5yr_citations_yr3 <- temp_5yr_citations_yr3_1 %>% 
@@ -97,12 +107,12 @@ temp_5yr_citations_by_cite_yr2 <- c %>%
 
 temp_5yr_citations_yr2_1 <- temp_5yr_citations_by_cite_yr2 %>% 
   group_by(citation_id) %>% 
-  summarize(num_citations_2 = n()) %>% 
+  dplyr::summarize(num_citations_2 = n()) %>% 
   rename(patent_id = citation_id)
 
 temp_5yr_citations_yr2_2 <- temp_5yr_citations_by_cite_yr2 %>% 
   group_by(citation_id) %>% 
-  summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm=TRUE)) %>% 
+  dplyr::summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm=TRUE)) %>% 
   rename(patent_id = citation_id)
 
 temp_5yr_citations_yr2 <- temp_5yr_citations_yr2_1 %>% 
@@ -117,12 +127,12 @@ temp_5yr_citations_by_cite_yr1 <- c %>%
 
 temp_5yr_citations_yr1_1 <- temp_5yr_citations_by_cite_yr1 %>% 
   group_by(citation_id) %>% 
-  summarize(num_citations_1 = n()) %>% 
+  dplyr::summarize(num_citations_1 = n()) %>% 
   rename(patent_id = citation_id)
 
 temp_5yr_citations_yr1_2 <- temp_5yr_citations_by_cite_yr1 %>% 
   group_by(citation_id) %>% 
-  summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm=TRUE)) %>% 
+  dplyr::summarize(weighted_cites_5yrs = sum(num_times_cited_by_us_patents, na.rm=TRUE)) %>% 
   rename(patent_id = citation_id) %>% 
   select(patent_id, weighted_cites_5yrs)
 

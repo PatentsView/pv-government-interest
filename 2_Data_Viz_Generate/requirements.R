@@ -16,7 +16,8 @@ install_pkgs <- function(pkg) {
 
 # load library packages
 pkg_list <- c("trend", "plyr", "scales", "MASS", "reshape", "tools", "plotly", "rjson",
-              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont", "Cairo", "processx", "lubridate")
+              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont", "Cairo",
+              "processx", "lubridate", "stringr")
 
 lapply(pkg_list, install_pkgs)
 
@@ -32,8 +33,8 @@ if(nrow(fonttable()) == 0){
 
 # Needed only on Windows - run once per R session
 # Adjust the path to match your installation of Ghostscript
-Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.25/bin/gswin64c.exe")
-Sys.setenv(ORCA_CMD = "C:/Program Files/Anaconda2/orca_app/orca.exe")
+Sys.setenv(R_GSCMD = "")
+Sys.setenv(ORCA_CMD = "")
 
 # set color scheme
 cyan <- rgb (0, 123, 188,	maxColorValue = 255)

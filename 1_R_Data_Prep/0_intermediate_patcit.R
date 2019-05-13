@@ -27,7 +27,7 @@ rm(usappcitation)
 
 # uspatentcitation count:
 # both num_us_patents_cited & num_times_cited_by_us_patents
-uspatentcitation <- fread(file = str_c(input_folder, "uspatentcitation.tsv"), header=TRUE, sep="\t", quote="", nThread=24)
+uspatentcitation <- fread(file = str_c(input_folder, "uspatentcitation.tsv"), header=TRUE, sep="\t", quote="")
 
 uspatcit_tf = uspatentcitation %>% select(patent_id) %>% group_by(patent_id) %>% 
   mutate(num_us_patents_cited = n()) %>% unique()

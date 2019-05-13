@@ -36,11 +36,11 @@ assignees_years_types.ratio <- assignees_years_types.short %>%
 
 grouped_assignees_types <- assignees_years_types.ratio %>% 
   group_by(year, thes_types) %>% 
-  summarize(type_count = sum(weight))
+  dplyr::summarize(type_count = sum(weight))
 
 total_count_assignees_types <- assignees_years_types.ratio %>% 
   group_by(year) %>% 
-  summarize(total = sum(weight))
+  dplyr::summarize(total = sum(weight))
 
 for_graph_types <- grouped_assignees_types %>% 
   left_join(total_count_assignees_types, by = 'year') %>% 
@@ -66,5 +66,11 @@ graph2 <- ggplot(for_graph_types, aes(x=year,y=PercentageofAssignees,group=thes_
   ) 
 
 graph2
-ggsave(paste0("out\\looked_up_gi_patent_assignees_over_time", ".png"), device = "png")
-write.csv(for_graph_types, "out\\sectors_over_time.csv")
+ggsave(paste0("out/looked_up_gi_patent_assignees_over_time", ".png"), device = "png")
+
+CairoPDF(file= paste0("data_viz/looked_up_gi_patent_assignees_over_time_cairo"),  width = 9, height = 7)
+graph2
+dev.off()
+
+
+write.csv(for_graph_types, "out/sectors_over_time.csv")

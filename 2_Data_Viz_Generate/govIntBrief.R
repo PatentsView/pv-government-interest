@@ -17,7 +17,7 @@ in.cite_5 <- read.csv("data_to_read/temp_5yr_citations_yr5.csv", header = TRUE, 
 
 
 ### read in tables from local file(not exist in db)
-in.sector <- read.csv("data_to_read/assignees_lookedup_types.csv", header = TRUE, stringsAsFactors = FALSE)
+in.sector <- fread("data_to_read/assignees_lookedup_types.csv", header = TRUE, stringsAsFactors = FALSE)
 in.fund <- read.csv("data_to_read/agencies.csv", header = TRUE, stringsAsFactors = FALSE)
 in.size <- read.csv("data_to_read/government_interest_patents_1980-2018_returned.csv", header = TRUE, stringsAsFactors = FALSE)
 #########################################################################################################
@@ -38,7 +38,7 @@ in.patent_level.merged <- merge(in.patent_level, in.gov_level, by="patent_id")
 
 #########################################################################################################
 # Plots
-
+script_v = "1.0"
 source("top6_technology_fields.R")
 # top6_plot save as a pdf
 top6_plot
@@ -85,8 +85,8 @@ dev.off()
 
 source("patent_flow_sankey.R")
 #Sys.setenv('MAPBOX_TOKEN' = "")
-orca(patent_flow_plot, file = paste0("data_viz/4.12.19_Sankey_", script_v, ".pdf"))
-
+#orca(patent_flow_plot, file = paste0("data_viz/4.12.19_Sankey_", script_v, ".pdf"))
+CairoPDF(file = paste0("data_viz/4.12.19_firmSize_", script_v), width = 9, height = 7)
 
 
 source("citation_analysis.R")
@@ -126,7 +126,9 @@ level_one.clnd <- in.gov_level %>%
   mutate(weight = 1/n())
 
 sector_org_field.by_year.merged <- merge(sector_org.merged.ratio.clnd, in.patent_level, by="patent_id")
-sector_org_field.by_year.small <- sector_org_field.by_year.merged[c(1,2,5, 6,7,10,23)] %>% rename(wipo_field = wipo_field.x, year = year.x)
+sector_cols = c("patent_id","level_one","thes_types", "wipo_field.x", "year.x", 
+                "nber_subcategory", "wipo_sector")
+sector_org_field.by_year.small <- sector_org_field.by_year.merged[, sector_cols] %>% rename(wipo_field = wipo_field.x, year = year.x)
 sector_org_field.by_year.ratio <- sector_org_field.by_year.small %>% 
   group_by(patent_id) %>% 
   mutate(weight = 1/n())
