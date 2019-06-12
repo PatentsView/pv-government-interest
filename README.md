@@ -93,7 +93,7 @@ _2. Data Visualization_ - The scripts in the **2_Data_Viz_Generate** folder will
 	
 	a. Go to the folder '2_Data_Viz_Generate'. Open the scripts from this folder in R/RStudio. Make sure you change your working directory to match your current directory (Example folder path: *"<Your-Path-Here>/government-interest/2_Data_Viz_Generate/"*)
 
-	b. Run through the script "requirements.R".
+	b. Run through the script "requirements.R". Be sure to set the input and output folder paths.
 
 	c. Next, run the script "govIntBrief.R". This will generate all visualizations and runs for ~ 41 minutes.
 
