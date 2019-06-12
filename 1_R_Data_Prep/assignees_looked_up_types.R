@@ -1,5 +1,6 @@
 source("requirements.R")
 
+# Fill in filepaths
 input_folder = ""
 output_folder = ""
 
@@ -98,15 +99,15 @@ assignee$thes_types = NA
 idx_list = c(1:nrow(assignee))
 idx_to_run = c()
 
-# ~ 66,797: any Null organizations = Persons
+# ~ 66,000: any Null organizations = Persons
 null_idx = which(grepl("NULL", assignee$organization))
 assignee$thes_types[null_idx] = "Person"
 
-# acad ~ 211,604: set type of Academic orgs 
+# acad ~ 211,000: set type of Academic orgs 
 acad_idx = which(grepl(regex(re_acad), assignee$organization))
 assignee$thes_types[acad_idx] = "Academic"
 
-# ~ 4,354,349: set type of Corp orgs
+# ~ 4,000,000: set type of Corp orgs
 corp_idx = which(grepl(re_corp, assignee$organization))
 assignee$thes_types[corp_idx] = "Corporate"
 
@@ -115,7 +116,7 @@ corp_institute_idx = intersect(c(which(grepl(re_institute, assignee$organization
 assignee$thes_types[corp_institute_idx] = "Corporate"
 
 
-# gov ~ 47,428: set type of Gov orgs
+# gov ~ 47,000: set type of Gov orgs
 gov_idx = which(grepl(re_gov, assignee$organization))
 assignee$thes_types[gov_idx] = "Government"
 

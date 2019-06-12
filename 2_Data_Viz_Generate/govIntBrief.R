@@ -84,10 +84,9 @@ dev.off()
 
 
 source("patent_flow_sankey.R")
-#Sys.setenv('MAPBOX_TOKEN' = "")
-#orca(patent_flow_plot, file = paste0("data_viz/4.12.19_Sankey_", script_v, ".pdf"))
 CairoPDF(file = paste0("data_viz/4.12.19_firmSize_", script_v), width = 9, height = 7)
-
+patent_flow_plot
+dev.off()
 
 source("citation_analysis.R")
 citation_plot

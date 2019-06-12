@@ -41,6 +41,7 @@ darkPurple <- rgb (135, 30, 110, maxColorValue=255)
 darkGrey <- rgb (51, 54, 58, maxColorValue=255)	
 lightGrey <- rgb (152, 152, 152, maxColorValue=255)
 
+# Fill out filepaths
 input_folder = ""
 output_folder = ""
 

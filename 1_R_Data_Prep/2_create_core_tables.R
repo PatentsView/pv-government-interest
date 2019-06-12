@@ -8,7 +8,6 @@ nber <- fread(file = str_c(input_folder,"nber.tsv"), header=TRUE, sep="\t")
 wipo <- fread(file = str_c(input_folder,"wipo.tsv"), header=TRUE, sep="\t")
 wipo_field <- read.csv(file = str_c(input_folder,"wipo_field.tsv"), header=TRUE, sep="\t") 
 
-#temp_5yr_citations <- fread(file = str_c(input_folder, "temp_5yr_citations_all.csv"), sep=",")
 patent_govintorg <- fread(file = str_c(input_folder, "patent_govintorg.tsv"), header=TRUE, sep="\t")
 government_organization <- read.csv(file = str_c(input_folder, "government_organization.tsv"), header=TRUE, sep="\t")
 
@@ -60,17 +59,13 @@ n <- nber %>%
       rename(nber_category = category_id, nber_subcategory = subcategory_id) %>%  
       right_join(p, by = "patent_id")
 
-#temp_5yr_citations$citation_id = as.character(temp_5yr_citations$citation_id)
 n$num_inventors = as.double(n$num_inventors)
 n$num_assignees = as.double(n$num_assignees)
-#temp_5yr_citations$num_citations_in_5yrs = as.double(temp_5yr_citations$num_citations_in_5yrs)
 temp_patent_level_all <- n %>% 
-                          #left_join(temp_5yr_citations, by = c("patent_id" = "citation_id")) %>% 
+                          
                           mutate(num_inventors = if_else(is.na(num_inventors), 0, num_inventors),
                                  num_assignees = if_else(is.na(num_assignees), 0, num_assignees)) #,
-                                 #weighted_cites_5yrs = ifelse(is.na(weighted_cites_5yrs), 0, weighted_cites_5yrs),
-                                 #num_citations_in_5yrs = if_else(is.na(num_citations_in_5yrs), 0, num_citations_in_5yrs))
-
+                                 
 fwrite(temp_patent_level_all, file = str_c(output_folder, "temp_patent_level_all.csv"), sep = ",")
 
 ############################################################################

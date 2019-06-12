@@ -37,8 +37,7 @@ _2. Data Visualization_ - The scripts in the **2_Data_Viz_Generate** folder will
 	Note: Some of the scripts will take time to run since several bulk download tables are large. 
 	Here are estimated running times:
 		* assignees_looked_up_types.R (~ 17 minutes)
-		* 0_intermediate_patcit.R (~ 1 hour, 15 minutes)
-		* 1_generate_citation_counts (~ 4 hours)
+		* 1_intermediate_patcit.R (~ 1 hour, 15 minutes)
 		* 2_create_core_tables (~ 1 hour, 10 minutes)
 		* 3_create_assignee_table (~ 6 minutes)
 		* 4_inventor_gender (~ 3 minutes)
@@ -51,18 +50,12 @@ _2. Data Visualization_ - The scripts in the **2_Data_Viz_Generate** folder will
 			1. assignees_lookedup_types.csv
 			2. temp_gi_assignee_type.csv
 
-		Script 0:
+		Script 1:
 			1. temp_num_foreign_documents_cited.csv
 			2. temp_num_us_applications_cited.csv
 			3. temp_num_us_patents_cited.csv
 			4. temp_num_times_cited_by_us_patents.csv
 			5. temp_patent_counts_fac_vfinal.csv
-
-		Script 1:
-			1. temp_5yr_citations_by_cite_all.csv
-			2. temp_5yr_citations_all.csv
-			3. temp_5yr_citations_by_cite.csv
-			4. temp_5yr_citations.csv
 
 		Script 2:
 			1. temp_patent_level_all.csv
@@ -102,13 +95,9 @@ _2. Data Visualization_ - The scripts in the **2_Data_Viz_Generate** folder will
 
 	b. Run through the script "requirements.R".
 
-	Note: To use extrafonts in R, you will need to install ghostscript. Follow the instructions here: https://www.ghostscript.com/doc/current/Install.htm in order to install ghostscript. Then, change the Sys.setenv(__R_GSCMD__ = "") line in "requirements.R" to the path that matches where the Ghostscript executable is on your computer.
-
-	Note: To save the sankey visualization, you will need to install orca. If you run into errors, follow the instructions at: https://github.com/plotly/orca#installation to install orca. Then, change the Sys.setenv(__ORCA_CMD__ = "") line in "requirements.R" to the path that matches where the orca executable is on your computer.
-
 	c. Next, run the script "govIntBrief.R". This will generate all visualizations and runs for ~ 41 minutes.
 
-	This script will generate two folders:
+	This script will generate output to two folders:
 	(1) Folder **'data_viz/'**: a folder to store all of the viz that will be generated from running this R script
 	(2) Folder **'out/'**: a folder to store all of the tables that will be generated from running this R script
 	

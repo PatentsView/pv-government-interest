@@ -127,6 +127,6 @@
           text=element_text(size=16,  family="Cambria")
     ) 
   share_gi_total_plot
-  write.csv (merged.keep6, file = "out/merged_wipo_fields.keep6.csv")
+  write.csv(merged.keep6, file = "out/merged_wipo_fields.keep6.csv")
   
 
