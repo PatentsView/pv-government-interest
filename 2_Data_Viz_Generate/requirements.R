@@ -31,10 +31,6 @@ if(nrow(fonttable()) == 0){
   loadfonts(device = "pdf")
 }
 
-# Needed only on Windows - run once per R session
-# Adjust the path to match your installation of Ghostscript
-Sys.setenv(R_GSCMD = "")
-Sys.setenv(ORCA_CMD = "")
 
 # set color scheme
 cyan <- rgb (0, 123, 188,	maxColorValue = 255)
@@ -45,5 +41,6 @@ darkPurple <- rgb (135, 30, 110, maxColorValue=255)
 darkGrey <- rgb (51, 54, 58, maxColorValue=255)	
 lightGrey <- rgb (152, 152, 152, maxColorValue=255)
 
-
+input_folder = ""
+output_folder = ""
 

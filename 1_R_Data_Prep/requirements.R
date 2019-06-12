@@ -15,7 +15,7 @@ install_pkgs <- function(pkg) {
 } # end install_pkgs()
 
 # load library packages
-pkg_list <- c("data.table", "dplyr","lubridate", "tidyr","stringr","purrr", "chunked")
+pkg_list <- c("data.table", "dplyr","lubridate", "tidyr","stringr","purrr", "chunked", "readr")
 
 lapply(pkg_list, install_pkgs)
 
