@@ -50,9 +50,8 @@
     )
   top6_plot
   
-  write.csv (long.6a, file = "out\\gi.wipo_fields.keep6.csv") 
+  write.csv(long.6a, file = "out/gi.wipo_fields.keep6.csv") 
   
-
 
 # Share of total patents with a government interest 2005-2017, top six technology fields 
 # Figure 3 in gov interest data brief
@@ -71,7 +70,8 @@
   top6 <- as.character(freq.wipo_field.nn[1:6,1])
   
   # get wipo_field frequencies across all patents
-  in.all.since_1980 <- in.all %>% filter(year > 1980 & year <= 2017)
+  in.all = in.all %>% mutate(year = year(date)) 
+  #in.all.since_1980 <- in.all %>% filter(year > 1980 & year <= 2017)
   in.all.since_2005 <- in.all %>% filter(year >= 2005 & year <= 2017)
   
   freq.wipo_field.all <- as.data.frame(table(in.all.since_2005$wipo_field))
@@ -86,6 +86,12 @@
   
   long.6b <- as.data.frame(table(in.all.since_2005$wipo_field, in.all.since_2005$year))
   long.6b <- long.6b %>% select(wipo_field = Var1, year = Var2, freq = Freq)
+  
+  
+  long.6b$wipo_field = long.6b$wipo_field %>% as.character()
+  long.6a$wipo_field = long.6a$wipo_field %>% as.character()
+
+
   merged.long5 <- long.6a %>% 
     inner_join(long.6b, by=c("wipo_field","year"), suffixes=c("_5a", "_5b")) %>% 
     mutate(ratio = freq.x/freq.y)
@@ -93,6 +99,9 @@
   # keep only the top 5 wipo_fields
   keep.6b <- long.6b %>% filter(wipo_field %in% top6)
   keep.6b$year<-as.numeric(levels(keep.6b$year))[keep.6b$year]
+  keep.6b$wipo_field = keep.6b$wipo_field %>% as.character()
+  keep.6a$wipo_field = keep.6a$wipo_field %>% as.character()
+  
   merged.keep6 <- keep.6a %>% 
     inner_join(keep.6b , by=c("wipo_field","year"), suffixes=c("_6a", "_6b")) %>% 
     mutate(ratio = freq.x/freq.y)
@@ -118,6 +127,6 @@
           text=element_text(size=16,  family="Cambria")
     ) 
   share_gi_total_plot
-  write.csv (merged.keep5, file = "out\\merged_wipo_fields.keep6.csv")
+  write.csv(merged.keep6, file = "out/merged_wipo_fields.keep6.csv")
   
 

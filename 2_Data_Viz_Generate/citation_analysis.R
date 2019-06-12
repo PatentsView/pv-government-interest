@@ -32,29 +32,24 @@ level_one.clnd <- in.gov_level %>%
   # Five year citation analysis 
   # merge in.patent_level gi only with each of the five year counts; left join on all.  Must remove 2014 and later patents
   in.cite_1_sum <- in.cite_1 %>%  
-    group_by(cited_patent_id) %>% 
-    summarise(num_citation = sum(num_times_cited_by_us_patents)/n()) %>% 
-    rename(patent_id = cited_patent_id, num_citation = num_citation)
+    group_by(patent_id) %>% 
+    summarise(num_citation = sum(num_citations_1)/n())
   
   in.cite_2_sum <- in.cite_2 %>%  
-    group_by(cited_patent_id) %>% 
-    summarise(num_citation = sum(num_times_cited_by_us_patents)/n()) %>% 
-    rename(patent_id = cited_patent_id, num_citation = num_citation)
+    group_by(patent_id) %>% 
+    summarise(num_citation = sum(num_citations_2)/n())
   
   in.cite_3_sum <- in.cite_3 %>%  
-    group_by(cited_patent_id) %>% 
-    summarise(num_citation = sum(num_times_cited_by_us_patents)/n()) %>% 
-    rename(patent_id = cited_patent_id, num_citation = num_citation)
+    group_by(patent_id) %>% 
+    summarise(num_citation = sum(num_citations_3)/n())
   
   in.cite_4_sum <- in.cite_4 %>%  
-    group_by(cited_patent_id) %>% 
-    summarise(num_citation = sum(num_times_cited_by_us_patents)/n()) %>% 
-    rename(patent_id = cited_patent_id, num_citation = num_citation)
+    group_by(patent_id) %>% 
+    summarise(num_citation = sum(num_citations_4)/n())
   
   in.cite_5_sum <- in.cite_5 %>%  
-    group_by(cited_patent_id) %>% 
-    summarise(num_citation = sum(num_times_cited_by_us_patents)/n()) %>% 
-    rename(patent_id = cited_patent_id, num_citation = num_citation)
+    group_by(patent_id) %>% 
+    summarise(num_citation = sum(num_citations_5)/n())
   
   # merge all five year analysis data together
   cit.merge_1 <- in.patent_level %>%
@@ -72,7 +67,9 @@ level_one.clnd <- in.gov_level %>%
   sector_merge$Third <- sector_merge$num_citation_yr3 * sector_merge$weight
   sector_merge$Fourth <- sector_merge$num_citation_yr4 * sector_merge$weight
   sector_merge$Fifth <- sector_merge$num_citation * sector_merge$weight
-  sector_merge.sub <- sector_merge[,c(23:30)]
+  cols_to_keep = c("thes_types", "weight", "First", "Second",
+                   "Third","Fourth","Fifth")
+  sector_merge.sub <- sector_merge[,cols_to_keep]
   
   sector_merge.sub[is.na(sector_merge.sub)] <- 0
   cit_sector.count <- aggregate(cbind (weight, First, Second, Third, Fourth, Fifth)
@@ -90,9 +87,6 @@ level_one.clnd <- in.gov_level %>%
   cit_sector.count.melt <- melt(cit_sector.count.clnd, id="thes_types", measure.vars = c(3:7))
   cit_sector.count.melt.clnd <- cit_sector.count.melt %>% filter(thes_types != "Other")
 
-
-  
-  
   citation_plot <- ggplot(cit_sector.count.melt.clnd, aes(x=variable,y=value,fill=thes_types)) +
     geom_bar(stat="identity", position = "dodge") + 
     labs(y= "Average Accrued Weighted Citations", x="Year After Publication") +
@@ -108,8 +102,8 @@ level_one.clnd <- in.gov_level %>%
   citation_plot  
  
   # export select datasets
-  write.csv (cit_sector.count.melt.clnd, file = "out\\citations_accrued_years_1_thru_5.csv")
-  write.csv (cit_sector.count.melt.clnd, file = "out\\cit_sector.count.melt.clnd.csv")
+  write.csv (cit_sector.count.melt.clnd, file = "out/citations_accrued_years_1_thru_5.csv")
+  write.csv (cit_sector.count.melt.clnd, file = "out/cit_sector.count.melt.clnd.csv")
   
 
 

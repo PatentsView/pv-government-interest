@@ -3,7 +3,7 @@
 # Effects: Installs package 
 install_pkgs <- function(pkg) { 
   
-  # Install package if it isn't already
+  # Install package if it isn't alreadya
   if (!(pkg %in% installed.packages()[, "Package"])){ 
     
     install.packages(pkg, repos='http://cran.us.r-project.org')
@@ -14,15 +14,23 @@ install_pkgs <- function(pkg) {
   
 } # end install_pkgs()
 
-
-
 # load library packages
 pkg_list <- c("trend", "plyr", "scales", "MASS", "reshape", "tools", "plotly", "rjson",
-              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont")
+              "data.table", "gridExtra", "psych", "dplyr", "dbplyr", "extrafont", "Cairo",
+              "processx", "lubridate", "stringr")
+
 lapply(pkg_list, install_pkgs)
+
 # add ggplot2 after setting device
-loadfonts(device = "win")
 library(ggplot2)
+
+# Note: These font import steps from the extrafont database only need to be run once (the first time you run this script)
+if(nrow(fonttable()) == 0){
+  print("Importing fonts for the first time - this may take a few minutes")
+  font_import()
+  loadfonts(device = "pdf")
+}
+
 
 # set color scheme
 cyan <- rgb (0, 123, 188,	maxColorValue = 255)
@@ -33,5 +41,7 @@ darkPurple <- rgb (135, 30, 110, maxColorValue=255)
 darkGrey <- rgb (51, 54, 58, maxColorValue=255)	
 lightGrey <- rgb (152, 152, 152, maxColorValue=255)
 
-
+# Fill out filepaths
+input_folder = ""
+output_folder = ""
 

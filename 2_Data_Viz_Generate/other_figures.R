@@ -4,6 +4,10 @@
 
   
   # graph R&D expenditures over time (line) 
+  
+  in.fund$Total.R.D = gsub(",", "", in.fund$Total.R.D)
+  in.fund$Total.R.D = in.fund$Total.R.D %>% as.numeric()
+  in.fund$Fiscal.Year = gsub("**","", in.fund$Fiscal.Year, fixed=TRUE) %>% as.numeric()
   in.fund$FederalIndex <- in.fund$Total.R.D / in.fund[in.fund$Fiscal.Year==1980, which(colnames(in.fund)=="Total.R.D")] * 100
   rd_expenditures_plot <- ggplot(data=in.fund, aes(x=Fiscal.Year, y=Total.R.D, group=1)) + geom_line(size=1.5, color="#0066CC") + 
     xlab ("Year") + ylab("Federal Expenditures (in billions of dollars)") + scale_y_continuous(labels = scales::dollar)
@@ -63,12 +67,10 @@
     ) 
   index_plot
   
-   write.csv (freq.all.by_year, file="out\\sector_org_field.by_year.count")
-   write.csv (freq.all.by_year, file="out\\freq.all.by_year.csv")
-   write.csv (freq.gi.by_year, file="out\\freq.gi.by_year.csv")
+   write.csv (freq.all.by_year, file="out/sector_org_field.by_year.count")
+   write.csv (freq.all.by_year, file="out/freq.all.by_year.csv")
+   write.csv (freq.gi.by_year, file="out/freq.gi.by_year.csv")
    
-
-
 
 # Mean Number of Inventors in Gov Interest Patents and Across All Patents
 # Figure 7 in gov interest data brief
@@ -79,11 +81,11 @@
   colnames(patent_level.bkp)
   nrow(patent_level.bkp)
   patent_level.bkp$year <- as.numeric(as.character(patent_level.bkp$year))
-  gi.agg <- aggregate(patent_level.bkp[,c(2,3)], list(Year = patent_level.bkp$year), na.rm=TRUE, mean)
+  gi.agg <- aggregate(patent_level.bkp[,c("num_inventors","num_assignees")], list(Year = patent_level.bkp$year), na.rm=TRUE, mean)
   
   all.bkp <- in.all 
   all.bkp$year <- as.numeric(as.character(all.bkp$year))
-  all.agg <- aggregate(all.bkp[,c(2,3)], list(Year = all.bkp$year), na.rm=TRUE, mean)
+  all.agg <- aggregate(all.bkp[,c("num_inventors","num_assignees")], list(Year = all.bkp$year), na.rm=TRUE, mean)
   
   merged.agg <- gi.agg %>% inner_join(all.agg, by="Year", suffixes=c("_gi", "_all"))
   melt.agg <- melt(merged.agg, id="Year", measure.vars = c(2,4)) # was c(2:5)
@@ -133,9 +135,6 @@
     distinct() %>% 
     group_by(patent_id) %>% 
     mutate(weight = 1/n())
-  
-  
-  
   
   # get a table of unique level_one org with weighted count
   freq.level_one.srtd <- level_one.clnd %>% 
@@ -215,6 +214,6 @@
   
   firm_size_plot
   
-  write.csv (patent_size.cnt, file = "out\\patent_size.cnt.csv")
+  write.csv (patent_size.cnt, file = "out/patent_size.cnt.csv")
 
 
