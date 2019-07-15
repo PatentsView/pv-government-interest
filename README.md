@@ -98,6 +98,8 @@ _2. Data Visualization_ - The scripts in the **2_Data_Viz_Generate** folder will
 	c. Next, run the script "govIntBrief.R". This will generate all visualizations and runs for ~ 41 minutes.
 	
 	d. Run through the "requirements.R" script and then run the script "govIntBrief_assignee.R".
+	
+	e. Run through the "requirements.R" script and then run the script "govIntBrief_gender.R".
 
 	This script will generate output to two folders:
 	(1) Folder **'data_viz/'**: a folder to store all of the viz that will be generated from running this R script
