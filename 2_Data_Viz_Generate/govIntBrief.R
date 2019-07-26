@@ -42,14 +42,14 @@ script_v = "1.0"
 source("top6_technology_fields.R")
 # top6_plot save as a pdf
 top6_plot
-CairoPDF(file= paste0("data_viz/4.12.19_longWipoFields_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/longWipoFields_v", script_v),  width = 9, height = 7)
 top6_plot
 dev.off()
 
 # share_gi_total_plot save as pdf
 share_gi_total_plot 
 
-CairoPDF(file= paste0("data_viz/4.12.19_longWipoFieldsPercent_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/longWipoFieldsPercent_v", script_v),  width = 9, height = 7)
 share_gi_total_plot 
 dev.off()
 
@@ -57,41 +57,41 @@ source("other_figures.R")
 #index_plot save as pdf
 index_plot
 
-CairoPDF(file= paste0("data_viz/4.12.19_indexed_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/indexed_v", script_v),  width = 9, height = 7)
 index_plot
 dev.off()
 
 # mean_num_inv_plot save as pdf 
 mean_num_inv_plot
 
-CairoPDF(file= paste0("data_viz/4.12.19_longInventor_v", script_v),  width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/longInventor_v", script_v),  width = 9, height = 7)
 mean_num_inv_plot
 dev.off()
 
 # funding_agencies_plot save as pdf
 funding_agencies_plot
 
-CairoPDF(file= paste0("data_viz/4.12.19_funders-assignees.dodged_v", script_v), width = 9, height = 7)
+CairoPDF(file= paste0("data_viz/funders-assignees.dodged_v", script_v), width = 9, height = 7)
 funding_agencies_plot
 dev.off()
 
 # firm_size_plot save as pdf 
 firm_size_plot
 
-CairoPDF(file = paste0("data_viz/4.12.19_firmSize_", script_v), width = 9, height = 7)
+CairoPDF(file = paste0("data_viz/firmSize_", script_v), width = 9, height = 7)
 firm_size_plot
 dev.off()
 
 
 source("patent_flow_sankey.R")
-CairoPDF(file = paste0("data_viz/4.12.19_firmSize_", script_v), width = 9, height = 7)
+CairoPDF(file = paste0("data_viz/sankey_", script_v), width = 9, height = 7)
 patent_flow_plot
 dev.off()
 
 source("citation_analysis.R")
 citation_plot
 # save citation_plot as pdf
-CairoPDF(file = paste0("data_viz/4.12.19_fiveYearCitationImpact_", script_v), width = 9, height = 7)
+CairoPDF(file = paste0("data_viz/fiveYearCitationImpact_", script_v), width = 9, height = 7)
 citation_plot
 dev.off() 
 
