@@ -13,16 +13,15 @@ cat = list(academic, government, corporate, hospital)
 names(cat) = c("Academic", "Government", "Corporate", "Hospital")
 
 # process first thesaurus
-acg_txt_con = file(str_c(input_folder, "AcadCorpGovIndiv.txt"))
+# encoding default is UTF-8, specifying here for clarity
+acg_txt_con = file(str_c(input_folder, "AcadCorpGovIndiv.txt"), encoding = 'UTF-8')
 
 acg_text = readLines(acg_txt_con)
 category = NA
 
 for (line in acg_text){
-  print(line)
   if (startsWith(line, "*")){
     category = str_remove_all(line, "\r\n") %>% str_remove_all( pattern= fixed("**"))
-    print(str_c("category is ", category, sep = ""))
     
     if (category == "People"){
       break
@@ -33,11 +32,15 @@ for (line in acg_text){
     line_cleaned = str_remove_all(line, "\r\n") %>% str_replace_all(regex("\\d"), "") %>% 
       str_replace_all(regex("\\s"), "") %>% str_replace_all( pattern=fixed("\\b"), replacement="")
     cat[category][[1]] = append(cat[category][[1]], line_cleaned)
-    print(str_c("clean line is ", line_cleaned, sep = ""))
+
   }
 
   
 } # end for loop
+
+
+# close textfile connection
+close(acg_txt_con)
 
 
 # add in additional items 
@@ -56,9 +59,11 @@ cat["Hospital"][[1]] = append(cat["Hospital"][[1]], add_hospital)
 
 
 # process second thesaurus
-new_thes = file(str_c(input_folder, "new_thesaurus.txt"))
+# encoding default is UTF-8, specifying latin1 to ensure special chars are okay
+new_thes_con = file(str_c(input_folder, "new_thesaurus.txt"), encoding = "latin1")
 
-new_thes_text = readLines(new_thes)
+new_thes_text = readLines(new_thes_con)
+
 counter = 0
 idx_empty_lines = grep("^$", new_thes_text)
 new_thes_text = new_thes_text[-idx_empty_lines]
@@ -72,14 +77,16 @@ for (line in new_thes_text){
   } else{
     category = "Corporate"
   }
-  
-  print(str_c("category is: ", category, sep = ""))
+
   items = str_split(line, ",")[[1]]  
   clean_items = map(items, trimws, which = c("both")) %>% unlist()
   cat[category][[1]] = append(cat[category][[1]], clean_items)
   counter = counter + 1
 } # end for 
 
+
+# close textfile connection
+close(new_thes_con)
 
 re_acad = str_c(cat["Academic"][[1]], collapse="|")
 re_gov = str_c(cat["Government"][[1]], collapse="|")
@@ -92,7 +99,6 @@ rawassignee = fread(str_c(input_folder, "rawassignee.tsv"), sep = "\t", verbose 
 # keep only fields we need
 assignee = rawassignee %>% select(patent_id, type, organization)
  
-#rm(rawassignee)
 
 assignee$thes_types = NA
 
@@ -145,7 +151,5 @@ temp_gi_assignee_type <- assignee %>%
   filter(patent_id %in% govint_distinct_id$patent_id)
 
 fwrite(temp_gi_assignee_type, str_c(output_folder, "temp_gi_assignee_type.csv"), sep = ",")
-
-
 
 
