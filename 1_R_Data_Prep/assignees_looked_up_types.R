@@ -1,9 +1,5 @@
 source("requirements.R")
 
-# Fill in filepaths
-input_folder = ""
-output_folder = ""
-
 academic = c()
 government= c()
 corporate = c()

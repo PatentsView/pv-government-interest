@@ -4,7 +4,7 @@ source("requirements.R")
 temp_gi_assignee_type <- fread(file = str_c(input_folder, "temp_gi_assignee_type.csv"), header=TRUE, sep=",")
 temp_patent_level_gi <- read.csv(file = str_c(input_folder, "temp_patent_level_gi.csv"), header=TRUE, sep=",")
 patent_assignee <- fread(file = str_c(input_folder, "patent_assignee.tsv"), header=TRUE, sep="\t")
-assignee <- read.csv(file = str_c(input_folder, "assignee.tsv"), header=TRUE, sep="\t")
+assignee <- read.csv(file = str_c(input_folder, "assignee.tsv"), header=TRUE, sep="\t",quote = "")
 rawassignee <- fread(file = str_c(input_folder, "rawassignee.tsv"), header=TRUE, sep="\t")
 
 ## create table with assignee type data

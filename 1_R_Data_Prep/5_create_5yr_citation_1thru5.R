@@ -10,16 +10,6 @@ patent = fread(file=str_c(input_folder,"temp_patent_merged.csv"), header=TRUE, s
 
 patent = patent %>% rename(patent_id = id)
 
-uspatentcitation <- fread(file = str_c(govint_test,"uspatentcitation.tsv"), header=TRUE, sep="\t", quote = "")
-government_interest <- read.csv(file = str_c(govint_test, "government_interest.tsv"), header=TRUE, sep="\t")
-# patent counts and patent merged table
-patent = fread(file=str_c(output_folder,"temp_patent_merged.csv"), header=TRUE, sep=",", verbose=TRUE)
-
-patent = patent %>% rename(patent_id = id)
-
-
-
-
 ## table with each government interest patent and any citations within 5 years -- for each year 1 thru 5 (changed by ska)
 ## patent_20180528.temp_updated_gi is the table with all the government interest and government assignee patents
 distinct_patent_id <- government_interest %>% distinct(patent_id)
