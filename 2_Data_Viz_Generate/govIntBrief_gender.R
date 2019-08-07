@@ -1,5 +1,5 @@
 source("requirements.R")
-script_v <- "1.0"
+
 
 #########################################################################################################
 
@@ -60,8 +60,13 @@ graph1 <- ggplot(for_graph) +
         text=element_text(size=16,  family="Cambria")
   )
 graph1
-ggsave (paste0("data_viz/gi_teams_with_female_inventors_over_time.png"), device = "png")
-CairoPDF(file= paste0("data_viz/gi_teams_with_female_inventors_over_time_cairo", script_v),  width = 9, height = 7)
+
+save_plot_png(graph1, "data_viz/gi_teams_with_female_inventors_over_time.png")
+
+CairoPDF(file= "data_viz/gi_teams_with_female_inventors_over_time_cairo",  width = 9, height = 7)
+graph1
+dev.off()
+
 write.csv(for_graph, file=str_c(output_folder,"teams_with_at_least_one_woman.csv"))
 
 ##################################################
@@ -110,7 +115,12 @@ graph2 <- ggplot(data=for_graph.num_inventors, aes(x=num_inventors, y=meanPercWo
     legend.background = element_blank()
   ) 
 graph2
-ggsave(paste0("data_viz/percent_with_female_inventor_by_team_size.png"), device = "png")
-CairoPDF(file= paste0("data_viz/percent_with_female_inventor_by_team_size_cairo", script_v),  width = 9, height = 7)
+
+save_plot_png(graph2, "data_viz/percent_with_female_inventor_by_team_size.png")
+
+CairoPDF(file= "data_viz/percent_with_female_inventor_by_team_size",  width = 9, height = 7)
+graph2
+dev.off()
+
 write.csv(for_graph.num_inventors, "out/mean_percent_of_teams_with_a_female_inventor.csv") 
 

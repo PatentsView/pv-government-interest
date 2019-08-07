@@ -49,7 +49,7 @@ for_graph_types <- grouped_assignees_types %>%
 
 
 #make graph with looked up types **
-graph2 <- ggplot(for_graph_types, aes(x=year,y=PercentageofAssignees,group=thes_types,linetype=thes_types, colour=thes_types)) +
+graph1 <- ggplot(for_graph_types, aes(x=year,y=PercentageofAssignees,group=thes_types,linetype=thes_types, colour=thes_types)) +
   geom_line(size=1.5) + labs(y= "Percentage of Patents", x="Year") +
   scale_x_continuous(breaks=c(1980,1985,1990,1995,2000,2005,2010,2015)) +
   scale_colour_manual(values=c(darkPurple, cyan, darkGreen, darkGrey)) +
@@ -65,11 +65,12 @@ graph2 <- ggplot(for_graph_types, aes(x=year,y=PercentageofAssignees,group=thes_
         text=element_text(size=16,  family="Cambria")
   ) 
 
-graph2
-ggsave(paste0("out/looked_up_gi_patent_assignees_over_time", ".png"), device = "png")
+graph1
 
-CairoPDF(file= paste0("data_viz/looked_up_gi_patent_assignees_over_time_cairo"),  width = 9, height = 7)
-graph2
+save_plot_png(graph1, "data_viz/looked_up_gi_patent_assignees_over_time.png")
+
+CairoPDF(file= "data_viz/looked_up_gi_patent_assignees_over_time",  width = 9, height = 7)
+graph1
 dev.off()
 
 
