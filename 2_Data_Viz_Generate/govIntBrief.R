@@ -98,8 +98,9 @@ dev.off()
 
 
 source("patent_flow_sankey.R")
+#patent_flow_plot
 
-#Note: Will need to export manually from R
+#Note: Will need to export manually from R as .png - R handles plotly sankey viz differently
 #CairoPDF(file = paste0("data_viz/sankey_", script_v), width = 9, height = 7)
 #patent_flow_plot
 #dev.off()
