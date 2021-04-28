@@ -4,21 +4,22 @@
 # check for supporting docs and code in github or on the patentsview shared drive 
 source("requirements.R")
 #########################################################################################################
-in.patent_level <- read.csv("data_to_read/temp_patent_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
-in.gov_level <- read.csv("data_to_read/temp_gi_level_gi.csv", header = TRUE, stringsAsFactors = FALSE)
-in.all <- fread("data_to_read/temp_patent_level_all.csv", verbose = TRUE)
-in.assignees.all <- fread("data_to_read/all_assignees.csv", verbose=TRUE)
-in.cite_1 <- read.csv("data_to_read/temp_5yr_citations_yr1.csv", header = TRUE, stringsAsFactors = FALSE)
-in.cite_2 <- read.csv("data_to_read/temp_5yr_citations_yr2.csv", header = TRUE, stringsAsFactors = FALSE)
-in.cite_3 <- read.csv("data_to_read/temp_5yr_citations_yr3.csv", header = TRUE, stringsAsFactors = FALSE)
-in.cite_4 <- read.csv("data_to_read/temp_5yr_citations_yr4.csv", header = TRUE, stringsAsFactors = FALSE)
-in.cite_5 <- read.csv("data_to_read/temp_5yr_citations_yr5.csv", header = TRUE, stringsAsFactors = FALSE)
+in.patent_level <- read.csv(file = str_c(input_folder, "temp_patent_level_gi.csv"), header = TRUE, stringsAsFactors = FALSE)
+in.gov_level <- read.csv(file = str_c(input_folder, "temp_gi_level_gi.csv"), header = TRUE, stringsAsFactors = FALSE)
+in.all <- fread(file = str_c(input_folder, "temp_patent_level_all.csv"), verbose = TRUE)
+in.assignees.all <- fread(file = str_c(input_folder, "all_assignees.csv"), verbose=TRUE)
+in.cite_1 <- read.csv(file = str_c(input_folder, "temp_5yr_citations_yr1.csv"), header = TRUE, stringsAsFactors = FALSE)
+in.cite_2 <- read.csv(file = str_c(input_folder, "temp_5yr_citations_yr2.csv"), header = TRUE, stringsAsFactors = FALSE)
+in.cite_3 <- read.csv(file = str_c(input_folder, "temp_5yr_citations_yr3.csv"), header = TRUE, stringsAsFactors = FALSE)
+in.cite_4 <- read.csv(file = str_c(input_folder, "temp_5yr_citations_yr4.csv"), header = TRUE, stringsAsFactors = FALSE)
+in.cite_5 <- read.csv(file = str_c(input_folder, "temp_5yr_citations_yr5.csv"), header = TRUE, stringsAsFactors = FALSE)
 
 
 ### read in tables from local file(not exist in db)
-in.sector <- fread("data_to_read/assignees_lookedup_types.csv", header = TRUE, stringsAsFactors = FALSE)
-in.fund <- read.csv("data_to_read/agencies.csv", header = TRUE, stringsAsFactors = FALSE)
-in.size <- read.csv("data_to_read/government_interest_patents_1980-2018_returned.csv", header = TRUE, stringsAsFactors = FALSE)
+in.sector <- fread(file = str_c(input_folder, "assignees_lookedup_types.csv"), header = TRUE, stringsAsFactors = FALSE)
+in.fund <- read.csv(file = str_c(input_folder, "agencies.csv"), header = TRUE, stringsAsFactors = FALSE)
+names(in.fund)[1] <- "Fiscal.Year"
+in.size <- read.csv(file = str_c(input_folder, "government_interest_patents_1980-2018_returned.csv"), header = TRUE, stringsAsFactors = FALSE)
 #########################################################################################################
 
 # these government interest patents have some full text fields that contain organizations; not fixing here
@@ -42,7 +43,8 @@ source("top6_technology_fields.R")
 # top6_plot 
 top6_plot
 
-save_plot_png(top6_plot, "data_viz/longWipoFields.png")
+dev.copy(png, "data_viz/longWipoFields.png")
+dev.off()
 
 CairoPDF(file= "data_viz/longWipoFields",  width = 9, height = 7)
 top6_plot
@@ -50,8 +52,8 @@ dev.off()
 
 
 share_gi_total_plot 
-
-save_plot_png(share_gi_total_plot, "data_viz/longWipoFieldsPercent.png")
+dev.copy(png, "data_viz/longWipoFieldsPercent.png")
+dev.off()
 
 CairoPDF(file= "data_viz/longWipoFieldsPercent",  width = 9, height = 7)
 share_gi_total_plot 
@@ -61,8 +63,8 @@ dev.off()
 source("other_figures.R")
 
 index_plot
-
-save_plot_png(index_plot, "data_viz/indexed.png")
+dev.copy(png, "data_viz/indexed.png")
+dev.off()
 
 CairoPDF(file= "data_viz/indexed",  width = 9, height = 7)
 index_plot
@@ -71,9 +73,8 @@ dev.off()
 
 # mean_num_inv_plot save as pdf 
 mean_num_inv_plot
-
-
-save_plot_png(mean_num_inv_plot, "data_viz/longInventor.png")
+dev.copy(png, "data_viz/longInventor.png")
+dev.off()
 
 CairoPDF(file= "data_viz/longInventor",  width = 9, height = 7)
 mean_num_inv_plot
@@ -82,7 +83,8 @@ dev.off()
 # funding_agencies_plot save as pdf
 funding_agencies_plot
 
-save_plot_png(funding_agencies_plot, "data_viz/funders-assignees.dodged.png")
+dev.copy(png, "data_viz/funders-assignees.dodged.png")
+dev.off()
 
 CairoPDF(file= "data_viz/funders-assignees.dodged", width = 9, height = 7)
 funding_agencies_plot
@@ -91,7 +93,9 @@ dev.off()
 # firm_size_plot save as pdf 
 firm_size_plot
 
-save_plot_png(firm_size_plot, "data_viz/firmSize.png")
+dev.copy(png, "data_viz/firmSize.png")
+dev.off()
+
 CairoPDF(file = "data_viz/firmSize", width = 9, height = 7)
 firm_size_plot
 dev.off()
@@ -101,14 +105,16 @@ source("patent_flow_sankey.R")
 #patent_flow_plot
 
 #Note: Will need to export manually from R as .png - R handles plotly sankey viz differently
-#CairoPDF(file = paste0("data_viz/sankey_", script_v), width = 9, height = 7)
-#patent_flow_plot
-#dev.off()
+# CairoPDF(file = paste0("data_viz/sankey_", script_v), width = 9, height = 7)
+# patent_flow_plot
+# dev.off()
+
 
 source("citation_analysis.R")
 citation_plot
+dev.copy(png, "data_viz/fiveYearCitationImpact.png")
+dev.off()
 
-save_plot_png(citation_plot,"data_viz/fiveYearCitationImpact.png")
 # save citation_plot as pdf
 CairoPDF(file = "data_viz/fiveYearCitationImpact", width = 9, height = 7)
 citation_plot

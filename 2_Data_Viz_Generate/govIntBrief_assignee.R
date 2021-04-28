@@ -66,9 +66,8 @@ graph1 <- ggplot(for_graph_types, aes(x=year,y=PercentageofAssignees,group=thes_
   ) 
 
 graph1
-
-save_plot_png(graph1, "data_viz/looked_up_gi_patent_assignees_over_time.png")
-
+dev.copy(png, "data_viz/looked_up_gi_patent_assignees_over_time.png")
+dev.off()
 CairoPDF(file= "data_viz/looked_up_gi_patent_assignees_over_time",  width = 9, height = 7)
 graph1
 dev.off()
