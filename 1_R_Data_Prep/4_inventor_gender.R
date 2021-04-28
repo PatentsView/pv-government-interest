@@ -3,7 +3,7 @@ source("requirements.R")
 # read in table
 temp_inventor_gender <- read_tsv(file = str_c(input_folder, "inventor_gender.tsv"), col_names=TRUE, 
                                  col_types = list(col_character(), col_character(),col_character(), col_character()),
-                                 quote = "", na=c("",'"'))
+                                 na=c("",'"'))
 
 temp_patent_level_gi <- read.csv(file = str_c(input_folder, "temp_patent_level_gi.csv"), header=TRUE, sep=",")
 patent_inventor <- fread(file = str_c(input_folder, "patent_inventor.tsv"), header=TRUE, sep="\t")
@@ -14,7 +14,7 @@ patent_inventor <- fread(file = str_c(input_folder, "patent_inventor.tsv"), head
 
 a <- temp_patent_level_gi %>% select(patent_id)
 
-g <- temp_inventor_gender %>% rename(inventor_id = disamb_inventor_id_20190312) %>% select(inventor_id, male) %>%
+g <- temp_inventor_gender %>% rename(inventor_id = id) %>% select(inventor_id, male_flag) %>%
        filter(!is.na(inventor_id))
 
 # need inventor ids to make a filter list
@@ -39,7 +39,7 @@ temp_gi_inventor_gender <- temp_patent_level_gi %>%
   select(patent_id, num_inventors, date, wipo_sector, wipo_field) %>% 
   left_join(temp_govt_associated_inventors_clean, by ="patent_id")
 
-temp_gi_inventor_gender_clean = temp_gi_inventor_gender %>% rename(male = male) %>% filter(!is.na(male)) %>% filter(male %in% c("0","1"))
+temp_gi_inventor_gender_clean = temp_gi_inventor_gender %>% rename(male = male_flag) %>% filter(!is.na(male)) %>% filter(male %in% c("0","1"))
 temp_gi_inventor_gender_clean$male = temp_gi_inventor_gender_clean$male %>% as.double()
 
 
