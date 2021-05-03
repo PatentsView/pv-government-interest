@@ -42,6 +42,6 @@ darkGrey <- rgb (51, 54, 58, maxColorValue=255)
 lightGrey <- rgb (152, 152, 152, maxColorValue=255)
 
 # Fill out filepaths
-input_folder = "G:/pv-government-interest/2_Data_Viz_Generate/data_to_read/"
-output_folder = "G:/pv-government-interest/2_Data_Viz_Generate/data_viz/"
+input_folder = ""
+output_folder = ""
 

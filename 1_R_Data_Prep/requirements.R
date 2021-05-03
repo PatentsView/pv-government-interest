@@ -22,5 +22,5 @@ lapply(pkg_list, install_pkgs)
 
 ########### Set folder paths here #############
 # input and output folder paths
-input_folder = "G:/pv-government-interest/2_Data_Viz_Generate/data_to_read/"
-output_folder = "G:/pv-government-interest/2_Data_Viz_Generate/data_to_read/"
+input_folder = ""
+output_folder = ""
