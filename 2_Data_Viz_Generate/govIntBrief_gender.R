@@ -60,9 +60,8 @@ graph1 <- ggplot(for_graph) +
         text=element_text(size=16,  family="Cambria")
   )
 graph1
-
-save_plot_png(graph1, "data_viz/gi_teams_with_female_inventors_over_time.png")
-
+dev.copy(png, "data_viz/gi_teams_with_female_inventors_over_time.png")
+dev.off()
 CairoPDF(file= "data_viz/gi_teams_with_female_inventors_over_time_cairo",  width = 9, height = 7)
 graph1
 dev.off()
@@ -115,9 +114,8 @@ graph2 <- ggplot(data=for_graph.num_inventors, aes(x=num_inventors, y=meanPercWo
     legend.background = element_blank()
   ) 
 graph2
-
-save_plot_png(graph2, "data_viz/percent_with_female_inventor_by_team_size.png")
-
+dev.copy(png, "data_viz/percent_with_female_inventor_by_team_size.png")
+dev.off()
 CairoPDF(file= "data_viz/percent_with_female_inventor_by_team_size",  width = 9, height = 7)
 graph2
 dev.off()

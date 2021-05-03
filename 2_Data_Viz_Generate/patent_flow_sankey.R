@@ -11,7 +11,7 @@
   in.assignees$entity <- in.assignees$organization
   in.assignees$entity[which(in.assignees$entity == "")] <- in.assignees$name[which(in.assignees$entity == "")]
   
-  assignees.clnd <- in.assignees[,c(1,2,8)]
+  assignees.clnd <- in.assignees[,c(1,2,8,9)]
   
   #calculate the weight for each patent_id
   assignees.clnd <- assignees.clnd %>%  
