@@ -2,7 +2,7 @@ source("requirements.R")
 
 
 #read in table
-uspatentcitation <- fread(file = str_c(input_folder,"uspatentcitation.tsv"), header=TRUE, sep="\t", quote = "")
+uspatentcitation <- fread(file = str_c(input_folder,"uspatentcitation.tsv"), header=TRUE, sep="\t")
 government_interest <- read.csv(file = str_c(input_folder, "government_interest.tsv"), header=TRUE, sep="\t")
 
 # patent counts and patent merged table
@@ -16,8 +16,10 @@ distinct_patent_id <- government_interest %>% distinct(patent_id)
 a <- uspatentcitation %>%  
       filter(citation_id %in% distinct_patent_id$patent_id) %>% 
       select(patent_id, citation_id)
+
+patent$patent_id <- as.character(patent$patent_id)
 b <- a %>% 
-      left_join(patent, by=c("patent_id" = "patent_id")) %>% 
+      left_join(patent, by="patent_id") %>% 
       select(citation_id, patent_id, date, num_times_cited_by_us_patents) %>% 
       rename(citing_patent_date = date)
 

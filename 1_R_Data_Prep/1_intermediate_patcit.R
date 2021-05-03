@@ -1,3 +1,4 @@
+
 source("requirements.R")
 
 # 1. read in foreigncitation, usapplicationcitation, and uspatentcitation tables separately
@@ -5,7 +6,7 @@ source("requirements.R")
 # 3. merge into one file
 
 # foreign citation count
-foreigncitation <- fread(file = str_c(input_folder, "foreigncitation.tsv"), header=TRUE, sep="\t", quote = "")
+foreigncitation <- fread(file = str_c(input_folder, "foreigncitation.tsv"), header=TRUE, sep="\t")
 foreigncit_tf = foreigncitation %>% select(patent_id) %>% group_by(patent_id) %>% 
   mutate(num_foreign_documents_cited = n()) %>% unique()
 
@@ -15,7 +16,7 @@ fwrite(foreigncit_tf, str_c(output_folder, "temp_num_foreign_documents_cited.csv
 rm(foreigncitation)
 
 # usapplicationcitation count
-usappcitation <- fread(str_c(input_folder, "usapplicationcitation.tsv"),header=TRUE, sep="\t",quote="")
+usappcitation <- fread(str_c(input_folder, "usapplicationcitation.tsv"),header=TRUE, sep="\t")
 
 usappcit_tf = usappcitation %>% select(patent_id) %>% group_by(patent_id) %>% 
   mutate(num_us_applications_cited=n()) %>% unique()
@@ -27,7 +28,7 @@ rm(usappcitation)
 
 # uspatentcitation count:
 # both num_us_patents_cited & num_times_cited_by_us_patents
-uspatentcitation <- fread(file = str_c(input_folder, "uspatentcitation.tsv"), header=TRUE, sep="\t", quote="")
+uspatentcitation <- fread(file = str_c(input_folder, "uspatentcitation.tsv"), header=TRUE, sep="\t")
 
 uspatcit_tf = uspatentcitation %>% select(patent_id) %>% group_by(patent_id) %>% 
   mutate(num_us_patents_cited = n()) %>% unique()
@@ -44,9 +45,8 @@ rm(uspatentcitation)
 
 
 # merge at end - one table foreign citation count, uspatcit count,cit_byuspat count, usappcit count
-merge_foreign_app = merge(foreigncit_tf, usappcit_tf, by=c("patent_id" = "patent_id"), all = TRUE)
-
+merge_foreign_app = merge(foreigncit_tf, usappcit_tf, by = "patent_id", all = TRUE)
 merge_patcit_citbyuspat = merge(uspatcit_tf, cit_by_uspat_tf, by.x = "patent_id", by.y = "citation_id", all = TRUE)
-patent_counts_final = merge(merge_foreign_app, merge_patcit_citbyuspat, by=c("patent_id" = "patent_id"), all=TRUE)
+patent_counts_final = merge(merge_foreign_app, merge_patcit_citbyuspat, by="patent_id", all=TRUE)
 
 fwrite(patent_counts_final, str_c(output_folder, "temp_patent_counts_fac_vfinal.csv"), sep=",")

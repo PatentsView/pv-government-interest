@@ -1,3 +1,4 @@
+start = Sys.time()
 source("requirements.R")
 
 
@@ -15,7 +16,8 @@ government_organization <- read.csv(file = str_c(input_folder, "government_organ
 patent = fread(file=str_c(input_folder, "patent.tsv"), header = TRUE, sep="\t")
 patent_counts = fread(file=str_c(input_folder,"temp_patent_counts_fac_vfinal.csv"), header=TRUE, sep=",", verbose=TRUE)
 
-patent_merged = patent %>% left_join(patent_counts, by = c("id" = "patent_id"))
+patent$id <- as.character(patent$id)
+patent_merged = patent %>% left_join(patent_counts, by = c("id" = "patent_id" ))
 patent_merged$year = patent_merged$date %>% ymd() %>% year()
 fwrite(patent_merged, file = str_c(output_folder, "temp_patent_merged.csv"), sep = ",")
 
@@ -36,18 +38,21 @@ d <- patent_assignee %>%
         group_by(patent_id) %>% 
         summarise(num_assignees = n())
 
+d$patent_id <- as.character(d$patent_id)
+
 e <- c %>% left_join(d, by = "patent_id")
 
+wipo$patent_id <- as.character(wipo$patent_id)
 w <- wipo %>% 
       filter(sequence == 0) %>% 
       right_join(e, by = "patent_id") %>% 
       rename(id = field_id)
 
+w$id <- as.character(w$id)
 
 wf <- w %>% 
           left_join(wipo_field, by = "id") %>% 
           rename(wipo_sector = sector_title, wipo_field = field_title)
-
 
 p <- wf %>% 
         left_join(patent_merged, by = c("patent_id" ="id")) %>% 
@@ -61,10 +66,9 @@ n <- nber %>%
 
 n$num_inventors = as.double(n$num_inventors)
 n$num_assignees = as.double(n$num_assignees)
-temp_patent_level_all <- n %>% 
-                          
-                          mutate(num_inventors = if_else(is.na(num_inventors), 0, num_inventors),
-                                 num_assignees = if_else(is.na(num_assignees), 0, num_assignees)) #,
+temp_patent_level_all <- n %>%
+  mutate(num_inventors = if_else(is.na(num_inventors), 0, num_inventors),
+  num_assignees = if_else(is.na(num_assignees), 0, num_assignees)) #,
                                  
 fwrite(temp_patent_level_all, file = str_c(output_folder, "temp_patent_level_all.csv"), sep = ",")
 
@@ -95,3 +99,7 @@ temp_patent_level_nongi <- temp_patent_level_all %>%
   filter(!(patent_id %in% govint_distinct_id$patent_id))
 
 fwrite(temp_patent_level_nongi, file = str_c(output_folder, "temp_patent_level_nongi.csv"), sep = ",")
+
+end = Sys.time()
+
+print(end-start)
